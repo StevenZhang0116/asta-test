@@ -1,76 +1,93 @@
-Background Knowledge for Task: Ablation — Random Feedback vs Trace Approximation
+Background Knowledge for Task: Low-Rank and Block-Diagonal RTRL Approximations
 
 PURPOSE:
-RFLO saturates at ~34.5% on copy task regardless of hyperparameters. We need to determine
-whether the bottleneck is:
-(a) The random feedback matrix B (feedback alignment), or
-(b) The rank-1 eligibility trace approximation
+We proved that full RTRL (O(n³) memory) + random feedback achieves 100% on copy task,
+while rank-1 traces cap at ~28%. We need to find the MINIMUM richness between these extremes
+that still solves the task. This determines the computational cost of our novel algorithm.
 
-This ablation will tell us what to focus on for our novel algorithm.
+FULL RTRL RECAP:
+For RNN: h_t = tanh(W_rec @ h_{t-1} + W_in @ x_t + b)
+Full RTRL maintains: J[i,j,k] = dh_t^i / dW_rec^{j,k}
+Update: J_new[i,j,k] = phi'(a_t^i) * (sum_l W_rec[i,l] * J[l,j,k] + delta(i==j) * h_{t-1}^k)
+Memory: O(n³) — for n=64, this is 262,144 entries per batch element.
 
-ABLATION DESIGN:
-We test 4 conditions on the copy task (seq_len=10, alpha=1.0 for the RNN forward pass since
-that's where BPTT works best, but alpha for trace decay will vary):
+APPROXIMATION 1: BLOCK-DIAGONAL RTRL
+Partition the n neurons into n/K blocks of size K.
+Only track within-block Jacobians: J[i,j,k] only maintained when i and j are in the same block.
+This means: for each block of size K, we track a K×K×n sub-Jacobian.
+Total memory: (n/K) × K × K × n = n² × K (vs full RTRL: n³)
+Actually rethinking: The full Jacobian is J[i,j,k] = dh_i / dW_{j,k}
+- For block-diagonal: only track dh_i/dW_{j,k} when i is in the same block as j.
+- This means we ignore how neuron i is affected by weights in other blocks.
+- Update within block b: J_b[i,j,k] = phi'(a_i) * (sum_{l in block_b} W_rec[i,l] * J_b[l,j,k] + delta(i==j) * h_{t-1}^k)
+- Note: we ignore W_rec[i,l] for l NOT in block_b — this is the approximation.
+- Memory per block: K × K × n (the k index spans all n because h_{t-1} has all n components)
+  Wait, no: W_rec^{j,k} — j is the row (post-synaptic), k is the column (pre-synaptic).
+  If we only track dh_i/dW_{j,k} for i,j in same block, k still spans all n (pre-synaptic includes all neurons).
+  So memory = (n/K) blocks × K × K × n = n² × K. For n=64, K=8: 64²×8 = 32,768 (vs 262,144 for full).
 
-Condition 1: RFLO (baseline)
-- Random feedback B
-- Rank-1 eligibility trace
-- This is standard RFLO: ~34.5% accuracy
+Actually let me reconsider. For W_rec[j,k], j is the target neuron (post-synaptic), k is the source.
+- Full RTRL tracks: dh_t^i / dW_rec[j,k] for ALL i,j,k. Shape: n × n × n.
+- Block-diagonal: only track dh_t^i / dW_rec[j,k] for i,j in SAME BLOCK.
+  Shape: (n/K) blocks × K × K × n (the k index is unrestricted since it's pre-synaptic source).
+  Hmm that's still O(n² × K).
 
-Condition 2: Exact Feedback + Rank-1 Trace
-- Use W_out^T instead of random B for learning signal
-- Keep rank-1 eligibility trace
-- If this jumps to >> 34.5%, random feedback is the bottleneck
+Simpler version: partition BOTH rows and columns into blocks.
+- Only track dh_t^i / dW_rec[j,k] when i, j, AND k are in the same block.
+- Shape: (n/K) blocks × K × K × K. Total: n × K².
+- For n=64, K=8: 64 × 64 = 4,096 (vs 262,144). 64× cheaper!
+- Approximation: ignore all cross-block influences.
+- Bio metaphor: neurons in a cortical column only track how their local circuit affects learning.
 
-Condition 3: Random Feedback + Full RTRL Trace
-- Keep random B
-- But use the EXACT influence matrix (full RTRL) instead of rank-1 approx
-- RTRL computes dh_t/dW exactly via forward-mode differentiation
-- This is O(n^4) but feasible for hidden=64 or small hidden
-- If this jumps to >> 34.5%, the trace approximation is the bottleneck
+APPROXIMATION 2: LOW-RANK RTRL
+Instead of the full Jacobian J[i,j,k] = dh_i/dW_{j,k}, maintain a low-rank approximation.
+Key idea: for the weight update, what we actually need is:
+  dW_rec[j,k] = sum_i L_i * J[i,j,k]
+where L is the learning signal. This is a contraction over i.
 
-Condition 4: Exact Feedback + Full RTRL Trace (upper bound)
-- Use W_out^T AND full RTRL
-- This should approach BPTT performance (it IS essentially BPTT reformulated)
-- Serves as a sanity check
+We can write J as a matrix M of shape n × (n×n), where M[i, j*n+k] = J[i,j,k].
+If we approximate M ≈ U @ V^T where U is n×R and V is (n²)×R, then:
+  dW = L^T @ U @ V^T  (reshaped to n×n)
+This gives us rank-R approximation with memory O(n×R + n²×R).
 
-IMPORTANT NOTE ON ALPHA AND TRACE DYNAMICS:
-For the RNN forward pass with alpha=1.0 (standard discrete RNN: h = tanh(Wh + Wx + b)):
-- The RFLO trace is: e_t = (1-alpha)*e_{t-1} + alpha*phi'*h_{t-1}
-- With alpha=1.0: e_t = phi'(a_t) * h_{t-1}  (NO memory in the trace!)
-- This means the trace only contains info about the CURRENT timestep
-- This is clearly wrong for memory tasks — the trace loses all history
+Actually simpler: for each weight W_rec[j,k], the relevant quantity is the vector
+  v[j,k] = (J[0,j,k], J[1,j,k], ..., J[n-1,j,k])  — how all neurons are influenced by W[j,k]
+The update is: dW[j,k] = L · v[j,k]
 
-For RFLO to work, alpha should be < 1 (continuous-time regime) so traces persist.
-But we showed in Exp02 that even with alpha=0.1-0.5 (where traces persist), RFLO caps at ~34.5%.
+A low-rank approximation: maintain R basis vectors u_1...u_R ∈ R^n and project:
+  v[j,k] ≈ sum_r (v[j,k] · u_r) * u_r
+But this still requires knowing v[j,k], which is the full Jacobian...
 
-The correct approach:
-- Use alpha=1.0 for the RNN forward dynamics (best for BPTT, standard discrete RNN)
-- But use a SEPARATE decay constant for the eligibility trace (e.g., trace_decay=0.9)
-- This decouples network dynamics from trace dynamics
+Better approach: maintain R "sensitivity directions" and track how the hidden state
+changes along these directions. This is more like:
+- Maintain P ∈ R^{n×R} such that P approximates the top-R singular directions of J.
+- Track P_t = phi'(a_t) * (W_rec @ P_{t-1} + noise_correction)
+- Memory: O(n × R) per weight matrix. Total for W_rec: O(n² × R) or O(n × R) depending on parametrization.
 
-Actually, re-reading Murray (2019) more carefully: RFLO assumes the continuous-time formulation
-where alpha IS the coupling between network and trace dynamics. The algorithm is specifically
-designed for the continuous-time regime. Using alpha=1.0 breaks the mathematical derivation.
+APPROXIMATION 3: RANDOM PROJECTION RTRL (simplest version)
+- Fix a random projection matrix Q ∈ R^{R×n} (R << n)
+- Instead of full Jacobian J[i,j,k], maintain compressed version: Jc[r,j,k] = sum_i Q[r,i] * J[i,j,k]
+- This is what "SnAp-1" (Menick et al., 2021) does with R=1 (which is essentially RFLO)
+- With R>1, we get richer trace at O(R × n²) memory
+- Update: dW[j,k] = sum_r (Q^T @ L)_r * Jc[r,j,k] = (Q^T @ L)^T @ Jc[:,j,k]
+  Hmm, need to think about this more carefully.
 
-For this ablation, we'll use:
-- Network: standard RNN h = tanh(W_rec @ h + W_in @ x + b) [alpha=1.0]
-- Trace: e_t = lambda * e_{t-1} + phi'(a_t) * h_{t-1}  [lambda is trace decay, separate param]
-- Try lambda in {0.8, 0.9, 0.95}
+Actually the simplest intermediate: just maintain MULTIPLE independent rank-1 traces
+with different random projections. This is essentially random projection RTRL.
 
-FULL RTRL (for Condition 3/4):
-The exact forward-mode derivative is:
-  dh_t/dW_rec[i,j] = phi'(a_t^i) * (sum_k W_rec[i,k] * dh_{t-1}^k/dW_rec[i,j] + delta_{ij} * h_{t-1}^j)
-This requires maintaining a tensor of shape (hidden, hidden, hidden) — O(n^3) memory.
-For hidden=64, this is 64*64*64 = 262144 entries per batch — feasible on GPU.
+EXPERIMENTAL PLAN:
+1. Block-diagonal RTRL: partition 64 neurons into blocks of K={4, 8, 16, 32}
+   - Only track within-block Jacobians (ignore cross-block connections in trace propagation)
+   - Keep full W_rec for forward pass (connections span blocks)
+   - Memory: n × K² per W_rec entry
 
-EXPECTED OUTCOMES:
-- If Condition 2 >> Condition 1: random feedback is the bottleneck → focus on better feedback
-- If Condition 3 >> Condition 1: trace approx is the bottleneck → focus on richer traces
-- If both Condition 2 and 3 >> Condition 1: both matter
-- Condition 4 should be near BPTT (sanity check)
+2. Multi-projection traces (random projection RTRL):
+   - Maintain R independent trace vectors, each is a rank-1 approximation with different random projection
+   - R = {2, 4, 8, 16, 32}
+   - Memory: R × n² (for R rank-1 traces)
+
+Setup: hidden=64, copy task seq_len=10, 10000 iterations, batch=32, lr=0.005, random feedback.
+Compare accuracy vs computational cost (memory, time).
 
 ENVIRONMENT:
 - Use: /home/zihan.zhang/.conda/envs/panda/bin/python
-- Hidden dim: 64 (for RTRL feasibility)
-- 10000 iterations, batch_size=32

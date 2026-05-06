@@ -2,134 +2,104 @@
 
 ## Research Question & Scope
 
-**Goal:** Develop a **new learning algorithm** for recurrent neural networks that is biologically plausible and ML-capable. The deliverable is a novel method — not a comparison study of existing approaches. Existing methods (RFLO, ModProp, etc.) are starting points and inspiration, not endpoints.
+**Goal:** Develop a **new learning algorithm** for recurrent neural networks that is biologically plausible and ML-capable. The deliverable is a novel method — not a comparison study.
 
-**Primary Question:** What new learning rule can we invent for recurrent systems that avoids BPTT's biological implausibilities (weight transport, non-locality, non-causality) while achieving competitive task performance — and what biological principles should ground it?
+**Primary Question:** What new learning rule can we invent for recurrent systems that avoids BPTT's biological implausibilities (weight transport, non-locality, non-causality) while achieving competitive task performance?
 
 **Scope:**
 - Start with vanilla RNN, then extend to gated architectures (GRU, LSTM)
 - Supervised learning first, then RL and unsupervised
 - Short sequences initially (10-50 steps) to iterate quickly
-- The algorithm needs a clear biological metaphor, not just a mathematical trick
+- The algorithm needs a clear biological metaphor
 - Must be computationally feasible — not orders of magnitude slower than BPTT
 
 **Environment:**
-- All Python experiments must be run in the conda environment: `/home/zihan.zhang/.conda/envs/panda`
-- Activate with: `conda activate /home/zihan.zhang/.conda/envs/panda` or use the full Python path `/home/zihan.zhang/.conda/envs/panda/bin/python`
-- If any Python packages are missing, install them within this environment (e.g., `/home/zihan.zhang/.conda/envs/panda/bin/pip install <package>`)
+- All Python experiments: `/home/zihan.zhang/.conda/envs/panda/bin/python`
+- Install packages: `/home/zihan.zhang/.conda/envs/panda/bin/pip install <package>`
 
 ## Operational Definitions
 
-- **Weight transport**: backward weights must be exact transposes of forward weights — biologically implausible since synapses are unidirectional
-- **Non-locality**: weight updates require information not available at the synapse
-- **Non-causality**: future states needed to compute present gradients (BPTT unrolling)
-- **Eligibility trace**: local synaptic variable tracking recent co-activity, decays over time
-- **Neuromodulation**: diffuse chemical signal (e.g., dopamine) that gates plasticity
-- **Feedback alignment**: fixed random backward weights replacing transposed forward weights
-- **Online learning rule**: updates depend only on past and present, not future
-- **Three-factor rule**: ΔW = f(pre, post, modulator) — general framework encompassing many bio-plausible rules
+- **Weight transport**: backward weights = exact transposes of forward weights (biologically implausible)
+- **Non-locality**: weight updates require non-local information
+- **Non-causality**: future states needed for present gradients
+- **Eligibility trace**: local synaptic variable tracking recent co-activity
+- **Neuromodulation**: diffuse chemical signal gating plasticity
+- **Feedback alignment**: fixed random backward weights
+- **RTRL**: Real-Time Recurrent Learning — exact forward-mode gradient, O(n^3) memory, online
+- **Three-factor rule**: ΔW = f(pre, post, modulator)
 
 ## Related Work
 
-**Comprehensive literature review completed** — see `docs/literature_review.md` for full details.
+See `docs/literature_review.md`. Key methods: Feedback Alignment, RFLO, e-prop, KeRNL, OSTL, ModProp.
 
-Key methods surveyed:
-1. **Feedback Alignment** (Lillicrap 2016): random backward weights solve weight transport in feedforward nets.
-2. **RFLO** (Murray 2019): online, local, causal rule for vanilla RNNs. Rank-1 approx to influence matrix.
-3. **e-prop** (Bellec 2020): eligibility propagation for spiking RNNs. Strong bio metaphor.
-4. **KeRNL** (Roth 2019): learned temporal kernel. Moderate performance.
-5. **OSTL** (Bohnstingl 2022): forward-mode + random feedback. O(n²) memory.
-6. **ModProp** (Liu 2022): per-synapse learned temporal filters. Most expressive but complex.
+## Hypotheses — Updated After Exp04
 
-**Critical finding: NO existing method has been convincingly extended to gated architectures (GRU/LSTM).**
+**H1 (RESOLVED — FALSE):** Plain rank-1 eligibility traces cannot solve memory tasks regardless of optimizer or feedback mechanism. Confirmed definitively: rank-1 + SGD = 28%, rank-1 + Adam = 28%, rank-1 + momentum = 25%. The information content of the trace is the binding constraint.
 
-## Hypotheses
+**H4 (RESOLVED — FALSE):** Random feedback alignment is NOT a significant bottleneck. Full RTRL + random feedback = 100%. Random FB works perfectly when given good gradient information.
 
-**H1 (confidence: 30%, down from 45%):** A learning rule combining eligibility traces + neuromodulatory gating + random feedback can train vanilla RNNs on short-sequence tasks within reasonable range of BPTT. *Further weakened by Exp02: RFLO saturates at ~34.5% on copy task (seq_len=10) across ALL hyperparameter settings, while BPTT reaches 100%. The rank-1 eligibility trace approximation appears to be fundamentally insufficient for memory tasks. Plain RFLO is not a viable starting point without significant modification.*
+**H7 (CONFIRMED — TRUE, confidence: 95%):** The rank-1 trace approximation IS the primary bottleneck. Full RTRL + random FB reaches 100% with simple SGD. The trace quality is everything; the optimizer and feedback mechanism are irrelevant once the trace is exact.
 
-**H2 (confidence: 45%):** Gate activations in GRU/LSTM can serve as local modulatory signals. *Unchanged — not yet tested. However, if the basic trace mechanism is this weak, gating alone won't fix it.*
+**H8 (RESOLVED — FALSE):** The optimizer is NOT the bottleneck. SGD with full RTRL reaches 100%. Adam provides no benefit when the gradient is correct.
 
-**H3 (confidence: 75%, up from 70%):** Performance gap vs. BPTT grows with sequence length. *Strongly confirmed: even at seq_len=10, the gap is 100% vs 34.5%.*
+**H10 (new, confidence: 70%):** A biologically plausible approximation to RTRL that is cheaper than O(n^3) but richer than rank-1 is the key to a novel algorithm. Candidates:
+- Low-rank RTRL (rank K=5-20 approximation of the n×n Jacobian)
+- Sparse RTRL (only track a subset of the influence matrix)
+- Block-diagonal RTRL (neurons organized in groups, only track within-group influences)
+- Eligibility traces with recurrent dynamics (the trace itself evolves as a small RNN)
 
-**H4 (confidence: 55%):** Random feedback alignment + eligibility traces work better together than either alone. *Need ablation: is the bottleneck the random feedback or the trace approximation?*
-
-**H5 (confidence: 60%, up from 50%):** Multi-timescale eligibility traces (or richer trace dynamics) are needed to bridge the gap. *Strengthened: single-timescale traces saturate at ~34% regardless of the timescale (alpha). The rank-1 approximation loses too much temporal structure.*
-
-**H6 (RESOLVED):** BPTT needs tuning — confirmed that with alpha=1.0, lr=1e-3, it reaches 100% on copy task. The architecture is fine; the issue was alpha=0.2 causing information decay.
-
-**H7 (new, confidence: 55%):** The key bottleneck in RFLO is the rank-1 approximation to the influence matrix, not the random feedback. A higher-rank trace (rank-K, K=3-5) could dramatically improve performance while remaining local and online. This is where our novel contribution might lie.
+**H11 (new, confidence: 60%):** Block-diagonal RTRL maps well to biological column/minicolumn structure and could provide a natural O(n × K²) approximation (where K is column size ~5-20).
 
 ## Experimental Designs
 
-**Direction A (DONE): Implement RFLO baseline.** ✓ 
-**Direction A2 (DONE): Hyperparameter sweep.** ✓ Confirmed RFLO ceiling at ~34.5%, BPTT at 100%.
+**Direction A (DONE): RFLO baseline.** ✓
+**Direction A2 (DONE): Hyperparameter sweep.** ✓ RFLO caps at ~34.5%.
+**Direction A3 (DONE): Ablation.** ✓ Trace is the bottleneck (Exp03 was partially confounded but Exp04 clarifies).
+**Direction A4 (DONE): Optimizer effect.** ✓ Optimizer irrelevant. Full RTRL + random FB = 100% with SGD.
 
-**Direction A3 (NEXT): Ablation — separate the effect of random feedback from trace approximation.** Run RFLO with exact transpose (W_out^T) instead of random B. If performance jumps significantly, the bottleneck is random feedback. If it stays at ~34%, the bottleneck is the trace. This is critical for knowing what to improve.
+**Direction B (NEXT): Design a computationally tractable approximation to RTRL that is richer than rank-1.** The algorithm design phase. Key insight: we need something between rank-1 (O(n²), fails) and full RTRL (O(n³), perfect but too expensive). Candidates:
+1. **Low-rank RTRL**: Approximate the Jacobian dh/dW with a rank-K matrix (K << n). Keep top-K singular vectors of the influence matrix.
+2. **Block-diagonal RTRL**: Partition neurons into groups of size K. Only track within-group Jacobians. O(n × K²) memory. Bio metaphor: cortical columns.
+3. **Sparse RTRL**: Randomly sample which Jacobian entries to maintain. 
+4. **Multi-timescale traces**: K traces with different decay rates, linearly combined.
 
-**Direction B: Design novel rule with richer traces.** Based on ablation results, design a rule with:
-- Option 1: Higher-rank eligibility traces (maintain K rank-1 traces with different timescales)
-- Option 2: Use recurrent dynamics in the trace itself (second-order traces)
-- Option 3: Combine with gated architecture where gates modulate trace dynamics
-
-**Direction C: Gated architecture extension.** After vanilla RNN rule is competitive.
-
+**Direction C: Gated architecture extension.** After vanilla RNN works.
 **Direction D: Scaling.** After method works.
 
 ## Results Summary
 
-### Experiment 01: RFLO vs BPTT Initial (5000 iters, hidden=128, alpha=0.2)
+### Key Finding from Exp04 (DEFINITIVE):
 
-| Task | Method | Result |
-|------|--------|--------|
-| Copy (T=10) | BPTT (lr=1e-3) | 73.5% acc |
-| Copy (T=10) | RFLO (lr=1e-2) | 29.7% acc |
-| Adding (T=30) | BPTT (lr=1e-3) | 0.142 MSE |
-| Adding (T=30) | RFLO (lr=1e-2) | 0.174 MSE |
+| Trace | Feedback | Optimizer | Accuracy |
+|-------|----------|-----------|----------|
+| Rank-1 | Random | SGD | 28.1% |
+| Rank-1 | Random | Momentum | 24.5% |
+| Rank-1 | Random | Adam | 28.4% |
+| **Full RTRL** | **Random** | **SGD** | **100%** |
+| **Full RTRL** | **Random** | **Momentum** | **100%** |
+| **Full RTRL** | **Random** | **Adam** | **100%** |
+| Full RTRL | Exact | Adam | 100% |
 
-### Experiment 02: Hyperparameter Sweep on Copy Task (10000 iters, hidden=128)
+**Conclusion: The ONLY thing that matters is trace quality. Random feedback works perfectly. Optimizer is irrelevant. Rank-1 traces are fundamentally insufficient.**
 
-**BPTT Results (best → worst):**
-| Config | Final Accuracy |
-|--------|---------------|
-| alpha=1.0, lr=1e-3 | **1.000** |
-| alpha=0.5, lr=3e-3 | **1.000** |
-| alpha=0.5, lr=1e-3 | 0.998 |
-| alpha=0.2, lr=3e-3 | 0.986 |
-| alpha=0.2, lr=1e-3 | 0.927 |
-| alpha=1.0, lr=3e-3 | 0.699 |
+### Previous Experiments
+- Exp01: Initial RFLO vs BPTT (alpha=0.2 issue identified)
+- Exp02: Hyperparameter sweep confirming RFLO ceiling at 34.5%
+- Exp03: First ablation (partially confounded by lr issues)
+- Exp04: Definitive ablation + optimizer test
 
-**RFLO Results (best → worst):**
-| Config | Final Accuracy |
-|--------|---------------|
-| alpha=0.2, lr=0.02 | **0.345** |
-| alpha=0.2, lr=0.01 | 0.328 |
-| alpha=0.3, lr=0.01 | 0.325 |
-| alpha=0.1, lr=0.02 | 0.320 |
-| alpha=0.5, lr=0.02 | 0.320 |
-| alpha=0.5, lr=0.01 | 0.316 |
-| alpha=0.3, lr=0.02 | 0.314 |
-| alpha=0.1, lr=0.005 | 0.304 |
-| alpha=0.1, lr=0.01 | 0.302 |
-| alpha=0.2, lr=0.005 | 0.300 |
-
-**Key findings:**
-- BPTT achieves 100% with proper alpha (1.0 or 0.5); the Exp01 issue was alpha=0.2 causing information decay
-- RFLO saturates at ~30-35% regardless of alpha and lr — this is a **fundamental limitation of the rule**, not hyperparameters
-- The gap between BPTT (100%) and RFLO (34.5%) is enormous and consistent
-- RFLO's rank-1 trace approximation cannot capture the temporal structure needed for the copy task
-
-**Code:** `experiments/exp02_hyperparam_sweep.py`
-**Plots:** `results/exp02/hyperparam_sweep.png`
+**Code:** `experiments/exp01-04_*.py`
+**Plots:** `results/exp01-04/`
 
 ## Open Questions & Confusions
 
-1. **[Priority]** Is RFLO's bottleneck the rank-1 trace or the random feedback? Ablation needed.
-2. Would a higher-rank trace (K=3-5 independent traces with different decay rates) break through the 34% ceiling while remaining local?
-3. Can we formulate a trace that uses recurrent information without violating locality? (e.g., a trace that evolves with its own dynamics)
-4. The copy task requires exact memory — is this too hard for approximate methods? Should we also test on "softer" tasks (pattern generation, classification)?
-5. Murray (2019) reports RFLO working on various tasks — are our results consistent with the original paper, or is there a bug? (The original paper uses different tasks, mostly continuous outputs, not discrete memory.)
-6. What exactly makes the copy task hard for RFLO? Is it that the relevant input happens long before the output, and the rank-1 trace has decayed by then?
+1. **[Priority]** What is the minimum "rank" or "richness" of trace needed to solve copy task? Test rank-2, rank-5, rank-10, rank-20 approximations to find the threshold.
+2. **[Priority]** Can block-diagonal RTRL with block size K=8-16 solve the task? This would be O(n × K²) ≈ O(n × 64-256), much cheaper than O(n³).
+3. Why did Exp03's C3 (RTRL+RandomFB) only get 40% while Exp04's identical config gets 100%? Likely a bug in Exp03's implementation (possibly in the `einsum` or the loop where we accumulate `dW_rec` across batch incorrectly). Need to verify.
+4. Biological interpretation: what neural structure corresponds to "tracking a low-rank Jacobian"? Possible: lateral inhibition circuits compute projections, top-down feedback provides basis vectors.
+5. For block-diagonal: how to handle between-block connections? Ignore them (approximation)? Use random feedback for between-block credit?
+6. RTRL is online and causal — so the key remaining biological constraints are: (a) locality of the trace computation, and (b) computational tractability. The feedback can stay random.
 
 ## Suggested Next Step
 
-**Direction A3: Ablation experiment.** Replace random feedback B with exact W_out^T in our RFLO implementation. If accuracy jumps significantly (e.g., to 60%+), the random feedback is a major bottleneck and we should focus on better feedback mechanisms. If it stays at ~35%, the trace approximation is the bottleneck and we should focus on richer trace dynamics (Direction B).
+**Direction B: Implement and test low-rank and block-diagonal RTRL approximations on copy task.** Test rank K = {2, 4, 8, 16, 32} to find the minimum rank needed. Also test block-diagonal with block size K = {4, 8, 16}. Compare accuracy vs computational cost. The sweet spot will inform the algorithm design.

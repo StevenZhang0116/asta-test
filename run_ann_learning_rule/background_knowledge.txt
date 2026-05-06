@@ -1,0 +1,76 @@
+Background Knowledge for Task: Ablation — Random Feedback vs Trace Approximation
+
+PURPOSE:
+RFLO saturates at ~34.5% on copy task regardless of hyperparameters. We need to determine
+whether the bottleneck is:
+(a) The random feedback matrix B (feedback alignment), or
+(b) The rank-1 eligibility trace approximation
+
+This ablation will tell us what to focus on for our novel algorithm.
+
+ABLATION DESIGN:
+We test 4 conditions on the copy task (seq_len=10, alpha=1.0 for the RNN forward pass since
+that's where BPTT works best, but alpha for trace decay will vary):
+
+Condition 1: RFLO (baseline)
+- Random feedback B
+- Rank-1 eligibility trace
+- This is standard RFLO: ~34.5% accuracy
+
+Condition 2: Exact Feedback + Rank-1 Trace
+- Use W_out^T instead of random B for learning signal
+- Keep rank-1 eligibility trace
+- If this jumps to >> 34.5%, random feedback is the bottleneck
+
+Condition 3: Random Feedback + Full RTRL Trace
+- Keep random B
+- But use the EXACT influence matrix (full RTRL) instead of rank-1 approx
+- RTRL computes dh_t/dW exactly via forward-mode differentiation
+- This is O(n^4) but feasible for hidden=64 or small hidden
+- If this jumps to >> 34.5%, the trace approximation is the bottleneck
+
+Condition 4: Exact Feedback + Full RTRL Trace (upper bound)
+- Use W_out^T AND full RTRL
+- This should approach BPTT performance (it IS essentially BPTT reformulated)
+- Serves as a sanity check
+
+IMPORTANT NOTE ON ALPHA AND TRACE DYNAMICS:
+For the RNN forward pass with alpha=1.0 (standard discrete RNN: h = tanh(Wh + Wx + b)):
+- The RFLO trace is: e_t = (1-alpha)*e_{t-1} + alpha*phi'*h_{t-1}
+- With alpha=1.0: e_t = phi'(a_t) * h_{t-1}  (NO memory in the trace!)
+- This means the trace only contains info about the CURRENT timestep
+- This is clearly wrong for memory tasks — the trace loses all history
+
+For RFLO to work, alpha should be < 1 (continuous-time regime) so traces persist.
+But we showed in Exp02 that even with alpha=0.1-0.5 (where traces persist), RFLO caps at ~34.5%.
+
+The correct approach:
+- Use alpha=1.0 for the RNN forward dynamics (best for BPTT, standard discrete RNN)
+- But use a SEPARATE decay constant for the eligibility trace (e.g., trace_decay=0.9)
+- This decouples network dynamics from trace dynamics
+
+Actually, re-reading Murray (2019) more carefully: RFLO assumes the continuous-time formulation
+where alpha IS the coupling between network and trace dynamics. The algorithm is specifically
+designed for the continuous-time regime. Using alpha=1.0 breaks the mathematical derivation.
+
+For this ablation, we'll use:
+- Network: standard RNN h = tanh(W_rec @ h + W_in @ x + b) [alpha=1.0]
+- Trace: e_t = lambda * e_{t-1} + phi'(a_t) * h_{t-1}  [lambda is trace decay, separate param]
+- Try lambda in {0.8, 0.9, 0.95}
+
+FULL RTRL (for Condition 3/4):
+The exact forward-mode derivative is:
+  dh_t/dW_rec[i,j] = phi'(a_t^i) * (sum_k W_rec[i,k] * dh_{t-1}^k/dW_rec[i,j] + delta_{ij} * h_{t-1}^j)
+This requires maintaining a tensor of shape (hidden, hidden, hidden) — O(n^3) memory.
+For hidden=64, this is 64*64*64 = 262144 entries per batch — feasible on GPU.
+
+EXPECTED OUTCOMES:
+- If Condition 2 >> Condition 1: random feedback is the bottleneck → focus on better feedback
+- If Condition 3 >> Condition 1: trace approx is the bottleneck → focus on richer traces
+- If both Condition 2 and 3 >> Condition 1: both matter
+- Condition 4 should be near BPTT (sanity check)
+
+ENVIRONMENT:
+- Use: /home/zihan.zhang/.conda/envs/panda/bin/python
+- Hidden dim: 64 (for RTRL feasibility)
+- 10000 iterations, batch_size=32

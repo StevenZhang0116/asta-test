@@ -1,170 +1,135 @@
-# Research State: Biologically Plausible Learning Rules for RNNs
+# Research State
 
-## 1. Research Question & Scope
+## Research Question & Scope
 
-**Core question**: Can we design a learning rule for recurrent neural networks that (a) avoids the biological implausibilities of BPTT (weight transport, non-locality, non-causality), (b) has a clear mapping to known biological mechanisms, and (c) remains computationally effective on standard ML benchmarks?
+**Goal:** Develop a **new learning algorithm** for recurrent neural networks that is biologically plausible and ML-capable. The deliverable is a novel method — not a comparison study of existing approaches. Existing methods (RFLO, ModProp, etc.) are starting points and inspiration, not endpoints.
 
-**Scope**:
-- Architecture: vanilla RNN → GRU → LSTM (progressive complexity)
-- Learning paradigms: supervised → reinforcement → unsupervised
-- Biological plausibility axes: locality, causality, no weight transport, biologically interpretable signals
-- Benchmark difficulty: toy tasks → sequential MNIST → more complex temporal tasks
+**Primary Question:** What new learning rule can we invent for recurrent systems that avoids BPTT's biological implausibilities (weight transport, non-locality, non-causality) while achieving competitive task performance — and what biological principles should ground it?
 
-**Compute environment**:
-- Python/PyTorch experiments: use conda env at `/opt/homebrew/Caskroom/miniforge/base/envs/uwzihan` (PyTorch 2.2.1)
-- Run via: `/opt/homebrew/Caskroom/miniforge/base/envs/uwzihan/bin/python script.py`
+**Scope:**
+- Start with vanilla RNN, then extend to gated architectures (GRU, LSTM)
+- Supervised learning first, then RL and unsupervised
+- Short sequences initially (10-50 steps) to iterate quickly
+- The algorithm needs a clear biological metaphor, not just a mathematical trick
+- Must be computationally feasible — not orders of magnitude slower than BPTT
 
-## 2. Operational Definitions
+**Environment:**
+- All Python experiments must be run in the conda environment: `/home/zihan.zhang/.conda/envs/panda`
+- Activate with: `conda activate /home/zihan.zhang/.conda/envs/panda` or use the full Python path `/home/zihan.zhang/.conda/envs/panda/bin/python`
+- If any Python packages are missing, install them within this environment (e.g., `/home/zihan.zhang/.conda/envs/panda/bin/pip install <package>`)
 
-- **Locality**: A weight update Δw_ij depends only on quantities available at synapse ij (pre/post activities, local modulatory signals), not on activities or weights of distant neurons
-- **Causality**: The update at time t depends only on information available at or before time t (no backward pass through time)
-- **Weight transport**: The requirement that the feedback pathway uses the exact transpose of the forward weight matrix
-- **Eligibility trace**: A local synaptic variable that records recent co-activity of pre- and post-synaptic neurons, gating plasticity when a modulatory signal arrives
-- **Neuromodulatory signal**: A diffuse, extra-synaptic signal (e.g., neuropeptides, dopamine) that can broadcast information to populations of neurons without precise synaptic targeting
+## Operational Definitions
 
-## 3. Related Work
+- **Weight transport**: backward weights must be exact transposes of forward weights — biologically implausible since synapses are unidirectional
+- **Non-locality**: weight updates require information not available at the synapse
+- **Non-causality**: future states needed to compute present gradients (BPTT unrolling)
+- **Eligibility trace**: local synaptic variable tracking recent co-activity, decays over time
+- **Neuromodulation**: diffuse chemical signal (e.g., dopamine) that gates plasticity
+- **Feedback alignment**: fixed random backward weights replacing transposed forward weights
+- **Online learning rule**: updates depend only on past and present, not future
+- **Three-factor rule**: ΔW = f(pre, post, modulator) — general framework encompassing many bio-plausible rules
 
-### 3.1 ModProp (Liu et al., NeurIPS 2022)
-- Proposes that extra-synaptic diffusion of neuromodulators (e.g., neuropeptides) can propagate credit through arbitrary timespans
-- The key idea: modulatory signals convolve eligibility traces via causal, time-invariant, synapse-type-specific filter taps
-- Goes beyond temporal truncation (e-prop, RTRL truncations) by maintaining credit over longer horizons
-- Demonstrates advantage over existing bio-plausible temporal credit assignment rules on benchmark tasks
-- Provides a low-complexity, causal alternative to BPTT
+## Related Work
 
-### 3.2 RFLO (Murray, eLife 2019)
-- Derives a local, online learning rule for RNNs using random feedback projections
-- Weight updates depend only on local pre/post-synaptic activities + a random feedback projection of output error
-- Addresses both locality and weight transport simultaneously
-- Proposes an augmented circuit architecture for concatenating short patterns into longer sequences
-- Limitation: may struggle with very long temporal dependencies without the augmented architecture
+**Comprehensive literature review completed** — see `docs/literature_review.md` for full details.
 
-### 3.3 Feedback Alignment (Lillicrap et al., Nature Comms 2016)
-- Demonstrates that random, fixed feedback weights can replace symmetric backpropagation
-- The forward weights gradually align with the random feedback weights during learning
-- Resolves the weight transport problem for feedforward networks
-- Foundation for subsequent work extending feedback alignment to recurrent settings
+Key methods surveyed:
+1. **Feedback Alignment** (Lillicrap 2016): random backward weights solve weight transport in feedforward nets.
+2. **RFLO** (Murray 2019): online, local, causal rule for vanilla RNNs. Rank-1 approx to influence matrix.
+3. **e-prop** (Bellec 2020): eligibility propagation for spiking RNNs. Strong bio metaphor.
+4. **KeRNL** (Roth 2019): learned temporal kernel. Moderate performance.
+5. **OSTL** (Bohnstingl 2022): forward-mode + random feedback. O(n²) memory.
+6. **ModProp** (Liu 2022): per-synapse learned temporal filters. Most expressive but complex.
 
-### 3.4 SuperSpike (Zenke & Ganguli, 2018)
-- Supervised learning in multilayer spiking neural networks via surrogate gradients
-- Key contribution: a three-factor learning rule (pre × post × error) that works in temporal/spiking systems
-- Uses surrogate gradients to handle the non-differentiability of spikes
-- Demonstrates that local eligibility traces combined with a global error signal suffice for multi-layer credit assignment in spiking networks
-- Relevant to our work: provides a template for three-factor rules in temporal networks and shows eligibility traces can bridge the locality gap
+**Critical finding: NO existing method has been convincingly extended to gated architectures (GRU/LSTM).**
 
-### 3.5 Predictive Coding as Approximate Backprop (Whittington & Bogacz, 2017)
-- Shows that predictive coding networks with local Hebbian plasticity approximate the backpropagation algorithm
-- Each layer maintains a prediction of the layer below; errors propagate locally through prediction mismatches
-- Weight updates are purely local (Hebbian) once the network reaches equilibrium
-- Canonical paper linking the predictive coding framework to gradient-based learning
-- Relevant to our work: suggests predictive coding could be the biological substrate for error propagation in recurrent/temporal settings — Open Question #7
+## Hypotheses
 
-### 3.6 Dendritic Cortical Microcircuits (Sacramento et al., 2018)
-- Proposes that cortical pyramidal neurons with segregated dendritic compartments can implement backpropagation
-- Apical dendrites carry top-down error signals; basal dendrites carry feedforward activations
-- Credit assignment emerges from the interaction between compartments without weight transport
-- Specific interneuron types (SST, VIP, PV) play defined roles in routing error vs. activation signals
-- Relevant to our work: provides a concrete biological circuit motif for spatial credit assignment that could complement temporal mechanisms (eligibility traces, neuromodulation)
+**H1 (confidence: 30%, down from 45%):** A learning rule combining eligibility traces + neuromodulatory gating + random feedback can train vanilla RNNs on short-sequence tasks within reasonable range of BPTT. *Further weakened by Exp02: RFLO saturates at ~34.5% on copy task (seq_len=10) across ALL hyperparameter settings, while BPTT reaches 100%. The rank-1 eligibility trace approximation appears to be fundamentally insufficient for memory tasks. Plain RFLO is not a viable starting point without significant modification.*
 
-### 3.7 Equilibrium Propagation (Scellier & Bengio, 2017)
-- Energy-based alternative to backpropagation where error information propagates through network dynamics
-- After a small perturbation (nudge) at the output, the network relaxes to a new equilibrium; the difference between free and nudged equilibria gives the gradient
-- Fully local: weight updates depend only on pre/post activities in the two phases
-- No separate backward pass or error pathway required — the same connections carry both inference and learning signals
-- Relevant to our work: offers a physics-inspired framework that avoids weight transport entirely; however, extension to temporal/recurrent processing (beyond equilibrium systems) remains an open challenge
+**H2 (confidence: 45%):** Gate activations in GRU/LSTM can serve as local modulatory signals. *Unchanged — not yet tested. However, if the basic trace mechanism is this weak, gating alone won't fix it.*
 
-### 3.8 Temporal Predictive Coding (Rao & Ballard, 1999; Millidge et al., 2022)
-- Rao & Ballard (1999) introduced predictive coding in visual cortex; Millidge et al. (2022, "Predictive Coding Approximates Backprop Along Arbitrary Computation Graphs") extends the framework to arbitrary computation graphs including recurrent/temporal ones
-- In temporal predictive coding, each neuron maintains a prediction of its own next-state; the prediction error drives local plasticity
-- Learning reduces to minimizing a sequence of local prediction errors propagated in time — no explicit backward pass through time is needed
-- Weight updates are Hebbian: Δw ∝ (prediction error) × (presynaptic activity), entirely local
-- The temporal hierarchy naturally handles multi-timescale dependencies: higher layers predict slower dynamics, lower layers predict faster dynamics
-- Key limitation: convergence requires iterative inference (settling dynamics) at each timestep, which is computationally expensive and biologically debated
-- Relevant to our work: provides an alternative spatial credit mechanism to random feedback — prediction errors propagated through a hierarchy could replace feedback alignment with a more biologically grounded signal, and the temporal hierarchy offers a natural way to extend the credit horizon beyond single eligibility trace timescales
+**H3 (confidence: 75%, up from 70%):** Performance gap vs. BPTT grows with sequence length. *Strongly confirmed: even at seq_len=10, the gap is 100% vs 34.5%.*
 
-### 3.9 e-prop (Bellec et al., Nature Communications 2020)
-- Three-factor learning rule for spiking RNNs: dw_ij/dt = e_ij(t) * L_i(t)
-- Eligibility trace e_ij(t) is local, online, O(1) per synapse; learning signal L_i(t) is projected top-down
-- Two variants: symmetric (uses weight transpose — not bio-plausible) and random (feedback alignment — bio-plausible)
-- Benchmarks: TIMIT ~91%, store-and-recall ~89%; symmetric closely matches BPTT, random shows some degradation
-- Limitation: temporal credit horizon limited by eligibility trace decay (tau_e ~ hundreds of ms); struggles with very long dependencies
-- Complexity: O(N) total per timestep — only bio-plausible method at this scale
-- Directly validates that eligibility traces + feedback alignment work for recurrent spiking networks
+**H4 (confidence: 55%):** Random feedback alignment + eligibility traces work better together than either alone. *Need ablation: is the bottleneck the random feedback or the trace approximation?*
 
-### 3.10 RTRL Approximations (UORO, SnAp, KF-RTRL)
-- Full RTRL: O(n^4) time, O(n^3) memory — exact but impractical
-- **UORO** (Tallec & Ollivier, 2017): rank-one stochastic approximation, O(n^2) time, O(n) memory, unbiased but high variance, NOT biologically local
-- **SnAp** (Menick et al., 2020): sparse n-step approximation, O(n^2) for SnAp-1, deterministic, outperforms UORO substantially, NOT biologically local
-- **KF-RTRL** (Mujika et al., NeurIPS 2018): Kronecker factored, O(n^2), lower variance than UORO, "almost matches TBPTT" on PTB
-- Key insight: ALL RTRL approximations achieve O(n^2) but NONE are biologically local — they require global information flow
-- Our approach (if H2 works) would be unique: O(N) AND local AND extended temporal credit
+**H5 (confidence: 60%, up from 50%):** Multi-timescale eligibility traces (or richer trace dynamics) are needed to bridge the gap. *Strengthened: single-timescale traces saturate at ~34% regardless of the timescale (alpha). The rank-1 approximation loses too much temporal structure.*
 
-### 3.11 Three-Factor Hebbian Rules (General Framework)
-- Framework: dw_ij/dt = e_ij * M(t) where e_ij = f(pre) * g(post), M = neuromodulator
-- Key papers: Izhikevich (2007, ~2000 cit.), Gerstner et al. (2018, ~473 cit.), Kusmierz et al. (2017)
-- Biological evidence: striatum (dopamine, 1s window), cortex (NE/serotonin, 3-10s), hippocampus (dopamine, up to 1 min)
-- Proven achievable: reward-based learning, surprise-driven plasticity, behavioral timescale learning (tau_e 200ms-2s)
-- The third factor (modulator) can encode: reward prediction error, supervised error, attention, novelty
+**H6 (RESOLVED):** BPTT needs tuning — confirmed that with alpha=1.0, lr=1e-3, it reaches 100% on copy task. The architecture is fine; the issue was alpha=0.2 causing information decay.
 
-### 3.12 Combining Eligibility Traces with Neuromodulatory Temporal Convolutions
-- **No published paper explicitly unifies e-prop + ModProp** — this is a genuine research gap
-- Closest: Barretto-Bittar et al. (2026) extends e-prop with diffusion-based neuromodulatory credit; improved learning on three benchmarks
-- ModProp itself can be viewed as applying learned causal filter taps to eligibility traces
-- The formal comparison/synthesis remains open → directly supports novelty of H2
+**H7 (new, confidence: 55%):** The key bottleneck in RFLO is the rank-1 approximation to the influence matrix, not the random feedback. A higher-rank trace (rank-K, K=3-5) could dramatically improve performance while remaining local and online. This is where our novel contribution might lie.
 
-### 3.13 Other Relevant Work (to be surveyed)
-- Dendritic computation theories beyond Sacramento (e.g., Guerguiev et al., 2017)
-- Marschall, Cho & Savin (JMLR 2020): unified framework for online RNN learning
+## Experimental Designs
 
-## 4. Hypotheses
+**Direction A (DONE): Implement RFLO baseline.** ✓ 
+**Direction A2 (DONE): Hyperparameter sweep.** ✓ Confirmed RFLO ceiling at ~34.5%, BPTT at 100%.
 
-**H1** (Confidence: 60%): A combination of eligibility traces (for temporal credit) and random feedback projections (for spatial credit) can yield a fully local, causal learning rule for vanilla RNNs that performs within 80% of BPTT accuracy on sequential MNIST.
+**Direction A3 (NEXT): Ablation — separate the effect of random feedback from trace approximation.** Run RFLO with exact transpose (W_out^T) instead of random B. If performance jumps significantly, the bottleneck is random feedback. If it stays at ~34%, the bottleneck is the trace. This is critical for knowing what to improve.
 
-**H2** (Confidence: 45%): The neuromodulatory convolution idea from ModProp can be unified with random feedback (from RFLO/feedback alignment) into a single framework that handles both temporal and spatial credit assignment without weight transport.
+**Direction B: Design novel rule with richer traces.** Based on ablation results, design a rule with:
+- Option 1: Higher-rank eligibility traces (maintain K rank-1 traces with different timescales)
+- Option 2: Use recurrent dynamics in the trace itself (second-order traces)
+- Option 3: Combine with gated architecture where gates modulate trace dynamics
 
-**H3** (Confidence: 50%): Such a unified rule can be naturally extended to gated architectures (GRU/LSTM) by interpreting gating operations as dendritic computations or local neuromodulatory gating, without requiring fundamentally different mechanisms.
+**Direction C: Gated architecture extension.** After vanilla RNN rule is competitive.
 
-**H4** (Confidence: 35%): The same rule, with minimal modification, can operate in reinforcement learning settings by replacing the supervised error signal with a reward prediction error (analogous to dopamine signaling).
+**Direction D: Scaling.** After method works.
 
-**H5** (Confidence: 40%): The computational overhead of the bio-plausible rule is O(N^2) per timestep (similar to RFLO), making it practical for moderate-sized networks.
+## Results Summary
 
-**H6** (Confidence: 55%): The effective temporal credit horizon of the combined rule is governed by the eligibility trace time constant τ, predicting that (a) networks trained on tasks requiring T-step dependencies will develop eligibility traces with τ ∝ T, and (b) performance will degrade sharply for dependencies beyond ~2τ — mirroring the biological observation that neuromodulator diffusion timescales (tens of ms to seconds) set a natural limit on credit assignment range, and suggesting that organisms requiring longer credit horizons must recruit additional mechanisms (e.g., hippocampal replay, working memory buffers).
+### Experiment 01: RFLO vs BPTT Initial (5000 iters, hidden=128, alpha=0.2)
 
-**H7** (Confidence: 35%): Replacing random feedback projections with temporal predictive coding — where spatial credit is carried by local prediction errors rather than fixed random weights — will (a) improve learning stability and final accuracy (by 5–15% on sMNIST) compared to feedback alignment, and (b) yield representations that spontaneously organize into a temporal hierarchy (higher layers tracking slower features, lower layers tracking faster features), matching the hierarchical timescale organization observed in primate cortex (Murray et al., J. Neurosci 2014). This would provide a falsifiable neuroscience prediction: if the model is correct, ablating top-down predictive connections in cortex should selectively impair learning of long-range but not short-range temporal dependencies.
+| Task | Method | Result |
+|------|--------|--------|
+| Copy (T=10) | BPTT (lr=1e-3) | 73.5% acc |
+| Copy (T=10) | RFLO (lr=1e-2) | 29.7% acc |
+| Adding (T=30) | BPTT (lr=1e-3) | 0.142 MSE |
+| Adding (T=30) | RFLO (lr=1e-2) | 0.174 MSE |
 
-## 5. Experimental Designs
+### Experiment 02: Hyperparameter Sweep on Copy Task (10000 iters, hidden=128)
 
-### Phase 1: Supervised Learning (vanilla RNN)
-- **Tasks**: Copy task, adding problem, sequential MNIST, sequential CIFAR-10
-- **Baselines**: BPTT, truncated BPTT, RTRL, e-prop, ModProp, RFLO
-- **Metrics**: accuracy/loss, convergence speed, memory footprint, wall-clock time
-- **Ablations**: effect of feedback alignment vs. symmetric feedback; effect of eligibility trace time constants; effect of modulatory filter shape
+**BPTT Results (best → worst):**
+| Config | Final Accuracy |
+|--------|---------------|
+| alpha=1.0, lr=1e-3 | **1.000** |
+| alpha=0.5, lr=3e-3 | **1.000** |
+| alpha=0.5, lr=1e-3 | 0.998 |
+| alpha=0.2, lr=3e-3 | 0.986 |
+| alpha=0.2, lr=1e-3 | 0.927 |
+| alpha=1.0, lr=3e-3 | 0.699 |
 
-### Phase 2: Extension to Gated Architectures
-- **Tasks**: same as Phase 1 + language modeling (Penn Treebank char-level)
-- **Architectures**: GRU, LSTM with bio-plausible rule vs. BPTT
-- **Key question**: does gating help the bio-plausible rule as much as it helps BPTT?
+**RFLO Results (best → worst):**
+| Config | Final Accuracy |
+|--------|---------------|
+| alpha=0.2, lr=0.02 | **0.345** |
+| alpha=0.2, lr=0.01 | 0.328 |
+| alpha=0.3, lr=0.01 | 0.325 |
+| alpha=0.1, lr=0.02 | 0.320 |
+| alpha=0.5, lr=0.02 | 0.320 |
+| alpha=0.5, lr=0.01 | 0.316 |
+| alpha=0.3, lr=0.02 | 0.314 |
+| alpha=0.1, lr=0.005 | 0.304 |
+| alpha=0.1, lr=0.01 | 0.302 |
+| alpha=0.2, lr=0.005 | 0.300 |
 
-### Phase 3: Beyond Supervised Learning
-- **RL tasks**: CartPole, Acrobot, simple Atari games with recurrent policies
-- **Unsupervised**: next-step prediction, sequence completion
-- **Key question**: can the same local learning rule operate with reward-modulated or prediction-error-driven signals?
+**Key findings:**
+- BPTT achieves 100% with proper alpha (1.0 or 0.5); the Exp01 issue was alpha=0.2 causing information decay
+- RFLO saturates at ~30-35% regardless of alpha and lr — this is a **fundamental limitation of the rule**, not hyperparameters
+- The gap between BPTT (100%) and RFLO (34.5%) is enormous and consistent
+- RFLO's rank-1 trace approximation cannot capture the temporal structure needed for the copy task
 
-## 6. Results Summary
+**Code:** `experiments/exp02_hyperparam_sweep.py`
+**Plots:** `results/exp02/hyperparam_sweep.png`
 
-*No computational experiments conducted yet.*
+## Open Questions & Confusions
 
-## 7. Open Questions & Confusions
+1. **[Priority]** Is RFLO's bottleneck the rank-1 trace or the random feedback? Ablation needed.
+2. Would a higher-rank trace (K=3-5 independent traces with different decay rates) break through the 34% ceiling while remaining local?
+3. Can we formulate a trace that uses recurrent information without violating locality? (e.g., a trace that evolves with its own dynamics)
+4. The copy task requires exact memory — is this too hard for approximate methods? Should we also test on "softer" tasks (pattern generation, classification)?
+5. Murray (2019) reports RFLO working on various tasks — are our results consistent with the original paper, or is there a bug? (The original paper uses different tasks, mostly continuous outputs, not discrete memory.)
+6. What exactly makes the copy task hard for RFLO? Is it that the relevant input happens long before the output, and the rank-1 trace has decayed by then?
 
-1. **How to handle gating in a bio-plausible way?** Gates in GRU/LSTM involve multiplicative interactions — what is the biological analogue? Dendritic gating? Shunting inhibition? Local neuromodulators controlling ion channel conductances?
+## Suggested Next Step
 
-2. **Reconciling ModProp and RFLO**: ModProp focuses on temporal credit (replacing BPTT's backward pass through time) while RFLO focuses on spatial credit (replacing weight transport). Can these be cleanly composed, or do they interfere?
-
-3. **Scalability**: RTRL is O(N^4) which is impractical. RFLO is O(N^2). Can we maintain O(N^2) or better while incorporating ModProp-like temporal propagation?
-
-4. **Biological metaphor coherence**: We need a single, coherent biological story — not a patchwork of tricks. What neural circuit motif implements the full rule? (e.g., a cortical microcircuit with specific interneuron types?)
-
-5. **Benchmarking fairness**: How to fairly compare bio-plausible rules against BPTT given that BPTT has access to exact gradients? Should we compare at equal parameter count, equal compute budget, or equal architectural complexity?
-
-6. **Stability**: Bio-plausible rules often suffer from instability in long sequences. What stabilization mechanisms (analogous to gradient clipping in BPTT) are biologically plausible?
-
-7. **Connection to predictive coding**: Several recent papers frame biological learning as predictive coding in hierarchical networks. Is there a natural extension of this to the temporal/recurrent domain that subsumes our approach?
+**Direction A3: Ablation experiment.** Replace random feedback B with exact W_out^T in our RFLO implementation. If accuracy jumps significantly (e.g., to 60%+), the random feedback is a major bottleneck and we should focus on better feedback mechanisms. If it stays at ~35%, the trace approximation is the bottleneck and we should focus on richer trace dynamics (Direction B).

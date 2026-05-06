@@ -1,93 +1,85 @@
-Background Knowledge for Task: Low-Rank and Block-Diagonal RTRL Approximations
+Background Knowledge for Task: Truncated Forward-RTRL
 
 PURPOSE:
-We proved that full RTRL (O(n³) memory) + random feedback achieves 100% on copy task,
-while rank-1 traces cap at ~28%. We need to find the MINIMUM richness between these extremes
-that still solves the task. This determines the computational cost of our novel algorithm.
+Test whether temporal windowing (propagating the full Jacobian for K steps then resetting)
+can solve the copy task. This answers: is temporal depth the key missing ingredient?
 
-FULL RTRL RECAP:
-For RNN: h_t = tanh(W_rec @ h_{t-1} + W_in @ x_t + b)
-Full RTRL maintains: J[i,j,k] = dh_t^i / dW_rec^{j,k}
-Update: J_new[i,j,k] = phi'(a_t^i) * (sum_l W_rec[i,l] * J[l,j,k] + delta(i==j) * h_{t-1}^k)
-Memory: O(n³) — for n=64, this is 262,144 entries per batch element.
+ALGORITHM:
+Standard RNN: h_t = tanh(W_rec @ h_{t-1} + W_in @ x_t + b)
 
-APPROXIMATION 1: BLOCK-DIAGONAL RTRL
-Partition the n neurons into n/K blocks of size K.
-Only track within-block Jacobians: J[i,j,k] only maintained when i and j are in the same block.
-This means: for each block of size K, we track a K×K×n sub-Jacobian.
-Total memory: (n/K) × K × K × n = n² × K (vs full RTRL: n³)
-Actually rethinking: The full Jacobian is J[i,j,k] = dh_i / dW_{j,k}
-- For block-diagonal: only track dh_i/dW_{j,k} when i is in the same block as j.
-- This means we ignore how neuron i is affected by weights in other blocks.
-- Update within block b: J_b[i,j,k] = phi'(a_i) * (sum_{l in block_b} W_rec[i,l] * J_b[l,j,k] + delta(i==j) * h_{t-1}^k)
-- Note: we ignore W_rec[i,l] for l NOT in block_b — this is the approximation.
-- Memory per block: K × K × n (the k index spans all n because h_{t-1} has all n components)
-  Wait, no: W_rec^{j,k} — j is the row (post-synaptic), k is the column (pre-synaptic).
-  If we only track dh_i/dW_{j,k} for i,j in same block, k still spans all n (pre-synaptic includes all neurons).
-  So memory = (n/K) blocks × K × K × n = n² × K. For n=64, K=8: 64²×8 = 32,768 (vs 262,144 for full).
+Truncated forward-RTRL with window K:
+- Maintain the full RTRL Jacobian J[i,j,k] = dh_t^i / dW_rec[j,k]
+- Every K steps, reset J = 0
+- Within the window, propagate exactly as in full RTRL:
+  J_new[i,j,k] = phi'(a_t^i) * (sum_l W_rec[i,l] * J[l,j,k] + delta(i==j)*h_{t-1}^k)
+- When computing weight updates, use the current (windowed) Jacobian
 
-Actually let me reconsider. For W_rec[j,k], j is the target neuron (post-synaptic), k is the source.
-- Full RTRL tracks: dh_t^i / dW_rec[j,k] for ALL i,j,k. Shape: n × n × n.
-- Block-diagonal: only track dh_t^i / dW_rec[j,k] for i,j in SAME BLOCK.
-  Shape: (n/K) blocks × K × K × n (the k index is unrestricted since it's pre-synaptic source).
-  Hmm that's still O(n² × K).
+KEY INSIGHT:
+- Full RTRL accumulates influence from ALL past timesteps → 100%
+- Rank-1 trace is a one-step approximation → 28%
+- Truncated RTRL captures K steps of influence → somewhere in between
 
-Simpler version: partition BOTH rows and columns into blocks.
-- Only track dh_t^i / dW_rec[j,k] when i, j, AND k are in the same block.
-- Shape: (n/K) blocks × K × K × K. Total: n × K².
-- For n=64, K=8: 64 × 64 = 4,096 (vs 262,144). 64× cheaper!
-- Approximation: ignore all cross-block influences.
-- Bio metaphor: neurons in a cortical column only track how their local circuit affects learning.
+FOR THE COPY TASK (seq_len=10):
+- Total sequence length: 2*10 + 1 = 21 timesteps
+- Input phase: steps 0-9 (symbols presented)
+- Blank phase: steps 10-19 (blank input)
+- Go signal: step 20
+- Output phase: steps 11-20 (must recall symbols)
+  Wait — in our implementation the output is at the LAST 10 steps: steps 11-20.
+  The delay between symbol input and recall is: step 0 symbol must be recalled at step 11 = 11 steps delay.
+  Step 9 symbol must be recalled at step 20 = 11 steps delay.
+  So ALL symbols have exactly 11 steps of delay.
 
-APPROXIMATION 2: LOW-RANK RTRL
-Instead of the full Jacobian J[i,j,k] = dh_i/dW_{j,k}, maintain a low-rank approximation.
-Key idea: for the weight update, what we actually need is:
-  dW_rec[j,k] = sum_i L_i * J[i,j,k]
-where L is the learning signal. This is a contraction over i.
+- If window K >= 21 (entire sequence), truncated = full RTRL → 100%
+- If window K = 11, the Jacobian at output time carries info from 11 steps back,
+  which is exactly the delay. Should work if the window aligns correctly.
+- BUT: the reset timing matters! If we reset at step 10 and output is at step 11-20,
+  then at step 11 we only have 1 step of Jacobian (just reset at 10). Bad!
+  If we reset at step 0, 21, etc. (once per sequence), that's K=21 = full RTRL.
 
-We can write J as a matrix M of shape n × (n×n), where M[i, j*n+k] = J[i,j,k].
-If we approximate M ≈ U @ V^T where U is n×R and V is (n²)×R, then:
-  dW = L^T @ U @ V^T  (reshaped to n×n)
-This gives us rank-R approximation with memory O(n×R + n²×R).
+IMPLEMENTATION NOTE:
+The reset schedule needs to be careful. Two approaches:
+1. FIXED PERIODIC RESET: Reset every K steps regardless of task structure.
+   The Jacobian at any output step has between 1 and K steps of accumulated info.
+2. SLIDING WINDOW: Instead of resetting, maintain the Jacobian but "decay" old info.
+   This is like a soft window.
 
-Actually simpler: for each weight W_rec[j,k], the relevant quantity is the vector
-  v[j,k] = (J[0,j,k], J[1,j,k], ..., J[n-1,j,k])  — how all neurons are influenced by W[j,k]
-The update is: dW[j,k] = L · v[j,k]
+For simplicity, let's use FIXED PERIODIC RESET. The window starts at multiples of K.
+At output time t, the Jacobian captures info from step (t - t%K) to step t.
+The worst case is when t%K = 0 (just reset), having only 1 step of info.
+The best case is when t%K = K-1, having K steps of info.
 
-A low-rank approximation: maintain R basis vectors u_1...u_R ∈ R^n and project:
-  v[j,k] ≈ sum_r (v[j,k] · u_r) * u_r
-But this still requires knowing v[j,k], which is the full Jacobian...
+For K=21 (full sequence): always has full info → 100%
+For K=15: output steps 11-20. If reset at step 0 and 15:
+  - Steps 11-14: have 11-14 steps of info (from step 0) ← good
+  - Steps 15-20: have 0-5 steps of info (just reset at 15) ← bad!
+  So periodic reset at K=15 is problematic.
 
-Better approach: maintain R "sensitivity directions" and track how the hidden state
-changes along these directions. This is more like:
-- Maintain P ∈ R^{n×R} such that P approximates the top-R singular directions of J.
-- Track P_t = phi'(a_t) * (W_rec @ P_{t-1} + noise_correction)
-- Memory: O(n × R) per weight matrix. Total for W_rec: O(n² × R) or O(n × R) depending on parametrization.
+BETTER APPROACH: Don't use periodic reset. Instead, use a SLIDING WINDOW:
+Maintain the Jacobian but multiply by a decay factor each step.
+J_new = decay * phi' * (W_rec @ J_old + direct)
+With decay < 1, old info fades exponentially. Effective window ≈ 1/(1-decay).
+- decay = 0.0: rank-1 (no memory in trace)
+- decay = 0.9: effective window ≈ 10 steps
+- decay = 0.95: effective window ≈ 20 steps
+- decay = 1.0: full RTRL (no decay)
 
-APPROXIMATION 3: RANDOM PROJECTION RTRL (simplest version)
-- Fix a random projection matrix Q ∈ R^{R×n} (R << n)
-- Instead of full Jacobian J[i,j,k], maintain compressed version: Jc[r,j,k] = sum_i Q[r,i] * J[i,j,k]
-- This is what "SnAp-1" (Menick et al., 2021) does with R=1 (which is essentially RFLO)
-- With R>1, we get richer trace at O(R × n²) memory
-- Update: dW[j,k] = sum_r (Q^T @ L)_r * Jc[r,j,k] = (Q^T @ L)^T @ Jc[:,j,k]
-  Hmm, need to think about this more carefully.
-
-Actually the simplest intermediate: just maintain MULTIPLE independent rank-1 traces
-with different random projections. This is essentially random projection RTRL.
+THIS IS ACTUALLY JUST FULL RTRL WITH TRACE DECAY — which we already tested partially.
+But the key difference from Exp03/04: in those experiments, the trace_decay was applied
+to a RANK-1 trace. Here we apply it to the FULL Jacobian.
 
 EXPERIMENTAL PLAN:
-1. Block-diagonal RTRL: partition 64 neurons into blocks of K={4, 8, 16, 32}
-   - Only track within-block Jacobians (ignore cross-block connections in trace propagation)
-   - Keep full W_rec for forward pass (connections span blocks)
-   - Memory: n × K² per W_rec entry
+Test both approaches:
+1. Periodic reset: K = {5, 7, 10, 15, 21} (21 = full sequence = upper bound)
+2. Exponential decay on full Jacobian: decay = {0.8, 0.9, 0.95, 0.99, 1.0}
 
-2. Multi-projection traces (random projection RTRL):
-   - Maintain R independent trace vectors, each is a rank-1 approximation with different random projection
-   - R = {2, 4, 8, 16, 32}
-   - Memory: R × n² (for R rank-1 traces)
+hidden=64, copy task seq_len=10, 10000 iters, batch=32, lr=0.005, random feedback.
+Compare accuracy for each setting.
 
-Setup: hidden=64, copy task seq_len=10, 10000 iterations, batch=32, lr=0.005, random feedback.
-Compare accuracy vs computational cost (memory, time).
+EXPECTED OUTCOMES:
+- K=21 or decay=1.0: should match full RTRL (100%)
+- K≥11 with good alignment: should be near 100%
+- K=5-7: partial credit, maybe 50-80%?
+- decay=0.9 (eff window ~10): may work if 10 steps is enough
 
-ENVIRONMENT:
-- Use: /home/zihan.zhang/.conda/envs/panda/bin/python
+ENVIRONMENT: /home/zihan.zhang/.conda/envs/panda/bin/python

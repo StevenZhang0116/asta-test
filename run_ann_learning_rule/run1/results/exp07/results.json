@@ -1,0 +1,73 @@
+{
+  "K=8_decay=0.8": {
+    "final_acc": 0.2251,
+    "time": 1023.8344523906708,
+    "K": 8,
+    "decay": 0.8,
+    "memory": 4096
+  },
+  "K=8_decay=0.9": {
+    "final_acc": 0.25915,
+    "time": 1026.4432499408722,
+    "K": 8,
+    "decay": 0.9,
+    "memory": 4096
+  },
+  "K=8_decay=0.95": {
+    "final_acc": 0.2884,
+    "time": 1024.330168247223,
+    "K": 8,
+    "decay": 0.95,
+    "memory": 4096
+  },
+  "K=16_decay=0.8": {
+    "final_acc": 0.3013,
+    "time": 767.5185842514038,
+    "K": 16,
+    "decay": 0.8,
+    "memory": 16384
+  },
+  "K=16_decay=0.9": {
+    "final_acc": 0.36365,
+    "time": 783.440113067627,
+    "K": 16,
+    "decay": 0.9,
+    "memory": 16384
+  },
+  "K=16_decay=0.95": {
+    "final_acc": 0.47715,
+    "time": 783.9144184589386,
+    "K": 16,
+    "decay": 0.95,
+    "memory": 16384
+  },
+  "K=32_decay=0.8": {
+    "final_acc": 0.4364,
+    "time": 659.8578345775604,
+    "K": 32,
+    "decay": 0.8,
+    "memory": 65536
+  },
+  "K=32_decay=0.9": {
+    "final_acc": 0.57885,
+    "time": 664.2195122241974,
+    "K": 32,
+    "decay": 0.9,
+    "memory": 65536
+  },
+  "K=32_decay=0.95": {
+    "final_acc": 0.709,
+    "time": 658.3388257026672,
+    "K": 32,
+    "decay": 0.95,
+    "memory": 65536
+  },
+  "references": {
+    "rank1_RFLO": 0.28,
+    "full_RTRL_decay0.9": 0.998,
+    "full_RTRL_nodecay": 1.0,
+    "blockdiag_K8_nodecay": 0.305,
+    "blockdiag_K16_nodecay": 0.411,
+    "blockdiag_K32_nodecay": 0.788
+  }
+}

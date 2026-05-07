@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:proceedings.neurips.cc)",
+      "WebFetch(domain:elifesciences.org)",
+      "WebFetch(domain:www.nature.com)",
+      "Bash(curl -s -L -H \"User-Agent: Mozilla/5.0\" \"https://www.nature.com/articles/ncomms13276\")",
+      "Skill(asta-literature-reports)",
+      "Bash(asta papers *)",
+      "Skill(semantic-scholar-lookup)",
+      "Bash(curl -s \"https://api.semanticscholar.org/graph/v1/paper/search?query=e-prop+eligibility+propagation+recurrent+networks+Bellec&limit=5&fields=title,authors,year,abstract,citationCount,corpusId,venue\")",
+      "Bash(curl -s \"https://api.semanticscholar.org/graph/v1/paper/search?query=KeRNL+kernel+recurrent+learning+biologically+plausible&limit=5&fields=title,authors,year,abstract,citationCount,corpusId,venue\")",
+      "WebFetch(domain:arxiv.org)",
+      "Bash(curl -s \"https://api.semanticscholar.org/graph/v1/paper/search?query=e-prop+eligibility+propagation+spiking+recurrent+Bellec+2020&limit=3&fields=title,authors,year,abstract,citationCount,corpusId,venue,externalIds\")",
+      "Bash(curl -s \"https://api.semanticscholar.org/graph/v1/paper/search?query=e-prop+eligibility+propagation+Bellec&limit=3&fields=title,year,abstract,citationCount,corpusId\")",
+      "WebFetch(domain:pubmed.ncbi.nlm.nih.gov)",
+      "WebFetch(domain:www.semanticscholar.org)",
+      "Skill(asta-software-experiment-runner)",
+      "Bash(/home/zihan.zhang/.conda/envs/panda/bin/python *)",
+      "Bash(/home/zihan.zhang/.conda/envs/panda/bin/pip install *)"
+    ]
+  }
+}

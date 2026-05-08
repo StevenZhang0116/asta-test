@@ -1,0 +1,114 @@
+Background Knowledge for Step 2: Mathematical Formalization of H2 (Oscillatory Phase-Gated Credit Assignment)
+
+TASK: Mathematically formalize the Oscillatory Phase-Gated Credit Assignment (OPCA) learning rule and test it on a simple task.
+
+== CORE IDEA ==
+In a vanilla RNN, the same recurrent weight matrix W is used for BOTH:
+1. Forward dynamics (during "forward phase" of oscillation): h_t = tanh(W * h_{t-1} + U * x_t)
+2. Credit/error propagation (during "credit phase" of oscillation): local error signals flow through W^T (or an approximation)
+
+The key insight: instead of requiring a separate backward pathway (W^T), we propose that during a different oscillatory phase, the SAME forward weights W can propagate credit information because:
+- The dynamics during credit phase operate in a DIFFERENT regime (e.g., linearized, inhibition-dominated)
+- This regime change effectively transposes the information flow direction
+
+== MATHEMATICAL FRAMEWORK ==
+
+Standard RNN forward pass:
+  h_t = tanh(W_rec * h_{t-1} + W_in * x_t + b)
+  y_t = W_out * h_t
+
+BPTT gradient for W_rec:
+  dL/dW_rec = sum_t (delta_t * h_{t-1}^T)
+  where delta_t = (W_rec^T * delta_{t+1}) .* tanh'(h_t) + W_out^T * dL/dy_t
+
+The weight transport problem: computing W_rec^T * delta requires knowing W_rec^T.
+
+== PROPOSED SOLUTION: PHASE-DEPENDENT DYNAMICS ==
+
+Oscillatory phase phi(t) cycles between 0 and 2*pi at frequency omega.
+
+Phase 1 (forward, phi in [0, pi]):
+  h_t = tanh(W * h_{t-1} + U * x_t)
+  Normal forward computation, store eligibility trace e_t = h_{t-1} * tanh'(pre_t)
+
+Phase 2 (credit, phi in [pi, 2*pi]):
+  Network enters a different dynamical regime:
+  - Inhibition-dominated: strong lateral inhibition linearizes the dynamics
+  - In this regime, a "credit signal" c_t propagates:
+    c_{t-1} = W * c_t (forward through W, but backward in time!)
+
+  Wait — this is W not W^T. The key insight:
+
+  OPTION A: "Activity-dependent transpose"
+  During the credit phase, the EFFECTIVE connectivity is different because:
+  - Synapses that were recently active (high eligibility) become more transmissive
+  - This creates an activity-dependent "effective transpose"
+
+  OPTION B: "Oscillatory interference"
+  The phase of the oscillation modulates which direction information flows:
+  - At certain phases, presynaptic→postsynaptic dominates (forward)
+  - At other phases, postsynaptic→presynaptic dominates (backward) via:
+    * Retrograde signaling (endocannabinoids, NO)
+    * Dendritic backpropagation + gap junctions
+    * Electrical synapses that reverse with membrane potential
+
+  OPTION C: "Emergent alignment through learning"
+  Over training, the forward weights W naturally develop properties that make
+  W itself (without transposition) useful for credit propagation — similar to
+  how feedback alignment works (Lillicrap 2016) but with a biological mechanism
+  (oscillatory phase) that gates when W is used for credit vs. computation.
+
+== MOST PROMISING FORMULATION (Option C + eligibility traces) ==
+
+The algorithm ("OPCA - Oscillatory Phase Credit Assignment"):
+
+1. Forward phase (compute):
+   h_t = tanh(W * h_{t-1} + U * x_t)
+   Store eligibility trace: e_t^{ij} = h_{t-1,j} * phi'(a_{t,i})
+
+2. At output (loss computation):
+   delta_T = dL/dh_T (output error, locally available at output neurons)
+
+3. Credit phase (propagate):
+   For t = T-1, T-2, ...:
+   c_t = f(W * c_{t+1})  where f is a nonlinearity active during credit phase
+
+   Key: we use W (not W^T) but the dynamics are different:
+   - f is a sign-preserving contraction (e.g., hard tanh with small gain)
+   - The credit phase uses FIXED RANDOM PROJECTIONS B to initialize c_T
+     (feedback alignment insight: B doesn't need to equal W^T)
+
+4. Weight update:
+   Delta W_{ij} = -eta * sum_t c_{t,i} * e_t^{ij}
+
+This is essentially: oscillatory phases gate between computation and a feedback-alignment-like credit propagation, where the "backward weights" are NOT random but are the forward weights themselves used in a different dynamical regime.
+
+== WHY THIS MIGHT WORK (and be novel) ==
+
+1. Feedback alignment shows random B works → W itself should work at least as well
+2. The oscillatory mechanism provides a biological explanation for WHY the network alternates between modes
+3. Using W (rather than random B) for credit provides BETTER alignment than pure feedback alignment
+4. The phase-dependent regime change (linearization during credit) is biologically grounded in inhibitory oscillatory dynamics
+
+== BIOLOGICAL CORRESPONDENCE ==
+- Forward phase = gamma-frequency burst activity (excitation-dominated)
+- Credit phase = theta-trough inhibition-dominated period
+- Eligibility trace = synaptic tag (calcium-dependent)
+- Credit signal = subthreshold membrane fluctuations during inhibitory periods
+- Weight update = occurs at theta-gamma coupling windows (STC - synaptic tagging and capture)
+
+== EXPERIMENT TO RUN ==
+Test OPCA on:
+1. Copy task (sequence length 10): input a sequence, after delay, reproduce it
+2. Compare against: BPTT, feedback alignment (random B), RFLO
+3. Measure: task accuracy, convergence speed, weight alignment (angle between W and effective gradient direction)
+
+Key implementation:
+- Vanilla RNN with N=128 hidden units
+- Copy task: 8-bit sequences of length 10, delay of 10 steps
+- Learning rate sweep: 1e-4 to 1e-2
+- Training: 5000 iterations, batch size 32
+
+== ENVIRONMENT ==
+- Use conda environment `panda`
+- Python with PyTorch

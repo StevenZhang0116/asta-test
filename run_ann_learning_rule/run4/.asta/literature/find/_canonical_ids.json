@@ -1,0 +1,83 @@
+{
+  "corpus_ids": [
+    249375268,
+    59316947,
+    168170024,
+    202024120,
+    211096709,
+    258418366,
+    257482749,
+    44111521,
+    258888139,
+    284350926,
+    279251783,
+    249282557,
+    220793111,
+    270199519,
+    248811533,
+    253237540,
+    222310139,
+    53080109,
+    214793776,
+    249953847,
+    246294866,
+    253370563,
+    248693162,
+    254877359,
+    268680611,
+    267938714,
+    282307733,
+    278715529,
+    235436025,
+    222125076,
+    219531394,
+    67857130,
+    173188684,
+    251979400,
+    253238035,
+    258833539,
+    258765635,
+    285872084,
+    227171963,
+    270702932,
+    272525048,
+    252668313,
+    260900316,
+    246294709,
+    272694021,
+    269983449,
+    273350737,
+    268033316,
+    250072160
+  ],
+  "explicit_lookup": [
+    [
+      "Lillicrap feedback alignment 2016 Nature Communications",
+      "lillicrap2016"
+    ],
+    [
+      "Murray RFLO Random Feedback Local Online 2019 eLife recurrent",
+      "murray2019"
+    ],
+    [
+      "Scellier Bengio Equilibrium Propagation 2017",
+      "scellier2017"
+    ],
+    [
+      "Williams Zipser RTRL 1989",
+      "williams1989"
+    ],
+    [
+      "Tallec Ollivier Unbiased Online Recurrent Optimization UORO 2018",
+      "tallec2018"
+    ],
+    [
+      "Menick SnAp-k sparse approximation RTRL 2020",
+      "menick2020"
+    ],
+    [
+      "Akrout weight mirrors deep learning 2019",
+      "akrout2019"
+    ]
+  ]
+}

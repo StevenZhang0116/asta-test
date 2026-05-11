@@ -1,0 +1,137 @@
+BACKGROUND KNOWLEDGE — Step 3: Minimal experimental harness + first comparison
+
+================================================================================
+TASK (Step 3)
+================================================================================
+Implement a minimal PyTorch experimental harness, following research_state.md
+§5 and the mathematical spec in design_step2.md, and run a first comparison
+of:
+  - BPTT (reference gradient; upper bound on performance)
+  - RFLO (Murray 2019) — simple online local baseline
+  - STC-Prop (the candidate rule from design_step2.md)
+
+plus one ablation:
+  - STC-Prop with c_i(t) ≡ 1 (no capture gate, should degenerate to an
+    RFLO-like rule with the extra slow commit trace)
+
+Additional baselines (FA-only, e-prop, truncated BPTT) are in the longer-term
+plan but are *nice-to-have* for this step — priority is getting the core
+comparison done.
+
+================================================================================
+TASK: COPY TASK
+================================================================================
+Copy task (Hochreiter & Schmidhuber 1997; standard in the RNN literature):
+
+  Input sequence of length T = T_input + T_delay + T_output, where
+    T_input = S (copy length)
+    T_delay = L (delay during which the network must remember the input)
+    T_output = S (the network should output the original sequence)
+
+  Input tokens: drawn from {1, ..., K-2} during T_input, a "go" token
+    (K-1) at position T_input + T_delay, and zero tokens elsewhere.
+
+  Target: zero during T_input + T_delay, and the original sequence during
+    T_output.
+
+  For a first experiment, start with K=8 (1 blank, 6 data symbols, 1 go
+  token), S=3, L=5, T = 3+5+3+1 = 12. Very short — tractable for all
+  baselines.
+
+  The task is a hard enough test of temporal credit assignment to
+  distinguish learning rules, but short enough that BPTT and RFLO both
+  succeed, giving a clean comparison.
+
+================================================================================
+IMPLEMENTATION PRIORITIES
+================================================================================
+
+PRIORITY 1: Get the harness running.
+  - Vanilla RNN (N=64 hidden units).
+  - Batched training on CPU or GPU (auto-detect per mission.md).
+  - conda env 'panda' (mission.md requirement).
+
+PRIORITY 2: Implement BPTT via PyTorch autograd. This is the reference.
+
+PRIORITY 3: Implement RFLO manually (no autograd; explicit eligibility traces).
+  - Per timestep:
+      e_ij(t) = alpha * e_ij(t-1) + sigma'(u_i(t)) * h_j(t-1)
+      output error -> random-feedback projection -> per-unit modulator M_i
+      Delta W_rec_ij(t) = -eta * M_i(t) * e_ij(t)
+  - Output layer: trained with normal gradient descent on output loss.
+  - This is the canonical Murray 2019 rule.
+
+PRIORITY 4: Implement STC-Prop on top of the RFLO machinery:
+  - Add per-neuron surprise sigma_i(t), threshold theta_i(t), capture
+    c_i(t).
+  - Add slow commit trace s_ij(t).
+  - Gate the weight update by c_i(t).
+  - All per design_step2.md equations 2.2 A-E.
+
+PRIORITY 5: Logging + metrics
+  - Training loss curve
+  - Final accuracy on held-out copy-task sequences
+  - Wall-clock per epoch
+  - Optional: gradient alignment cosine vs BPTT (can defer to later steps)
+
+================================================================================
+DESIGN CHOICES (explicit)
+================================================================================
+
+  - Hidden size N=64.
+  - Batch size 64.
+  - Number of training batches: 1000 (may need to grow).
+  - Learning rate eta = 1e-3 (tune if needed).
+  - Optimizer for BPTT: Adam (standard).
+  - For local rules (RFLO, STC-Prop), SGD-like per-step updates (direct
+    application of the local rule).
+  - RNN nonlinearity: tanh.
+  - Output layer: linear -> softmax cross-entropy over K tokens.
+  - Loss: summed cross-entropy over the full sequence, but non-output
+    timesteps produce only "blank" target (cross-entropy against blank).
+  - STC-Prop hyperparameters (from design_step2.md, first-guess values):
+      alpha = 0.8  (fast tag decay)
+      beta  = 0.95 (slow commit decay)
+      rho   = 0.1  (target capture rate)
+      eta_theta = 0.01 (homeostasis rate)
+  - Random feedback dim k = K (output dimension).
+
+================================================================================
+RISKS AND MITIGATIONS
+================================================================================
+  - Risk: RFLO/STC-Prop learning is slow and needs many more batches than
+    BPTT.  Mitigation: start with a TINY copy task (S=2, L=2) where all
+    three rules can succeed within a short training budget; scale up as
+    results allow.
+  - Risk: STC-Prop capture never fires if the surprise signal is tiny.
+    Mitigation: initialize theta = 0 and let homeostasis drive it to the
+    right level.
+  - Risk: Numerical instability.
+    Mitigation: gradient clipping for BPTT; bounded traces and standard
+    RNN init.
+
+================================================================================
+DELIVERABLES
+================================================================================
+  - A single Python file `step3_experiment.py` that contains:
+      * The copy-task generator
+      * Vanilla RNN model
+      * BPTT training loop
+      * RFLO training loop
+      * STC-Prop training loop (with no-gate ablation)
+      * Metrics/plotting hooks
+  - A results file `step3_results.json` with per-rule final loss,
+    accuracy, and wall-clock stats.
+  - A figure `step3_learning_curves.png` comparing losses over training.
+  - An updated research_state.md with the Step-3 results summary.
+  - logbook.md entry for Step 3.
+
+================================================================================
+OUT OF SCOPE FOR STEP 3
+================================================================================
+  - Full ablation suite. Only the no-gate ablation is required at this
+    step.
+  - Extensive hyperparameter sweeps.
+  - Scaling to longer sequences or larger networks.
+  - GRU/LSTM extension.
+  - Gradient-alignment-cosine analysis (nice-to-have but optional).

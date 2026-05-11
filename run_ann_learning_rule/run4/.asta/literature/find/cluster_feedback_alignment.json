@@ -1,0 +1,1733 @@
+{
+  "query": "feedback alignment and random feedback methods for credit assignment in recurrent neural networks, including direct feedback alignment, sign-concordant feedback, weight mirrors, and alignment of error signals without weight transport",
+  "results": [
+    {
+      "corpusId": 250340689,
+      "title": "How to Train Your Wide Neural Network Without Backprop: An Input-Weight Alignment Perspective",
+      "abstract": "Recent works have examined theoretical and empirical properties of wide neural networks trained in the Neural Tangent Kernel (NTK) regime. Given that biological neural networks are much wider than their arti\ufb01cial counterparts, we consider NTK regime wide neural networks as a possible model of biological neural networks. Lever-aging NTK theory, we show theoretically that gradient descent drives layerwise weight updates that are aligned with their input activity corre-lations weighted by error, and demonstrate empirically that the result also holds in \ufb01nite-width wide networks. The alignment result allows us to formulate a family of biologically-motivated, backpropagation-free learning rules that are theoretically equivalent to backpropagation in in\ufb01nite-width networks. We test these learning rules on benchmark problems in feedforward and recurrent neural networks and demonstrate, in wide networks, comparable performance to backpropagation. The proposed rules are particularly effective in low data regimes, which are common in biological learning settings.",
+      "year": 2021,
+      "authors": [
+        {
+          "name": "Akhilan Boopathy",
+          "id": ""
+        },
+        {
+          "name": "I. Fiete",
+          "id": ""
+        }
+      ],
+      "venue": "International Conference on Machine Learning",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:250340689",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.9723554014599668,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 219980355,
+      "title": "Extension of Direct Feedback Alignment to Convolutional and Recurrent Neural Network for Bio-plausible Deep Learning",
+      "abstract": "Throughout this paper, we focus on the improvement of the direct feedback alignment (DFA) algorithm and extend the usage of the DFA to convolutional and recurrent neural networks (CNNs and RNNs). Even though the DFA algorithm is biologically plausible and has a potential of high-speed training, it has not been considered as the substitute for back-propagation (BP) due to the low accuracy in the CNN and RNN training. In this work, we propose a new DFA algorithm for BP-level accurate CNN and RNN training. Firstly, we divide the network into several modules and apply the DFA algorithm within the module. Second, the DFA with the sparse backward weight is applied. It comes with a form of dilated convolution in the CNN case, and in a form of sparse matrix multiplication in the RNN case. Additionally, the error propagation method of CNN becomes simpler through the group convolution. Finally, hybrid DFA increases the accuracy of the CNN and RNN training to the BP-level while taking advantage of the parallelism and hardware efficiency of the DFA algorithm.",
+      "year": 2020,
+      "authors": [
+        {
+          "name": "Donghyeon Han",
+          "id": ""
+        },
+        {
+          "name": "Gwangtae Park",
+          "id": ""
+        },
+        {
+          "name": "Junha Ryu",
+          "id": ""
+        },
+        {
+          "name": "H. Yoo",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:219980355",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.9673378561015734,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 222310139,
+      "title": "Deep Reservoir Networks with Learned Hidden Reservoir Weights using Direct Feedback Alignment",
+      "abstract": "Deep Reservoir Computing has emerged as a new paradigm for deep learning, which is based around the reservoir computing principle of maintaining random pools of neurons combined with hierarchical deep learning. The reservoir paradigm reflects and respects the high degree of recurrence in biological brains, and the role that neuronal dynamics play in learning. However, one issue hampering deep reservoir network development is that one cannot backpropagate through the reservoir layers. Recent deep reservoir architectures do not learn hidden or hierarchical representations in the same manner as deep artificial neural networks, but rather concatenate all hidden reservoirs together to perform traditional regression. Here we present a novel Deep Reservoir Network for time series prediction and classification that learns through the non-differentiable hidden reservoir layers using a biologically-inspired backpropagation alternative called Direct Feedback Alignment, which resembles global dopamine signal broadcasting in the brain. We demonstrate its efficacy on two real world multidimensional time series datasets.",
+      "year": 2020,
+      "authors": [
+        {
+          "name": "Matthew S. Evanusa",
+          "id": ""
+        },
+        {
+          "name": "Y. Aloimonos",
+          "id": ""
+        },
+        {
+          "name": "Cornelia Fermuller",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:222310139",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.9647480082614944,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 250072160,
+      "title": "Distinguishing Learning Rules with Brain Machine Interfaces",
+      "abstract": "Despite extensive theoretical work on biologically plausible learning rules, clear evidence about whether and how such rules are implemented in the brain has been difficult to obtain. We consider biologically plausible supervised- and reinforcement-learning rules and ask whether changes in network activity during learning can be used to determine which learning rule is being used. Supervised learning requires a credit-assignment model estimating the mapping from neural activity to behavior, and, in a biological organism, this model will inevitably be an imperfect approximation of the ideal mapping, leading to a bias in the direction of the weight updates relative to the true gradient. Reinforcement learning, on the other hand, requires no credit-assignment model and tends to make weight updates following the true gradient direction. We derive a metric to distinguish between learning rules by observing changes in the network activity during learning, given that the mapping from brain to behavior is known by the experimenter. Because brain-machine interface (BMI) experiments allow for precise knowledge of this mapping, we model a cursor-control BMI task using recurrent neural networks, showing that learning rules can be distinguished in simulated experiments using only observations that a neuroscience experimenter would plausibly have access to.",
+      "year": 2022,
+      "authors": [
+        {
+          "name": "Jacob P. Portes",
+          "id": ""
+        },
+        {
+          "name": "Christian Schmid",
+          "id": ""
+        },
+        {
+          "name": "James M. Murray",
+          "id": ""
+        }
+      ],
+      "venue": "Neural Information Processing Systems",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:250072160",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.773936734257636,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 271953764,
+      "title": "Online reinforcement learning of state representation in recurrent network supported by the power of random feedback and biological constraints",
+      "abstract": "Representation of external and internal states in the brain plays a critical role in enabling suitable behavior. Recent studies suggest that state representation and state value can be simultaneously learnt through Temporal-Difference-Reinforcement-Learning (TDRL) and Backpropagation-Through-Time (BPTT) in recurrent neural networks (RNNs) and their readout. However, neural implementation of such learning remains unclear as BPTT requires offline update using transported downstream weights, which is suggested to be biologically implausible. We demonstrate that simple online training of RNNs using TD reward prediction error and random feedback, without additional memory or eligibility trace, can still learn the structure of tasks with cue-reward delay and timing variability. This is because TD learning itself is a solution for temporal credit assignment, and feedback alignment, a mechanism originally proposed for supervised learning, enables gradient approximation without weight transport. Furthermore, we show that biologically constraining downstream weights and random feedback to be non-negative not only preserves learning but may even enhance it because the non-negative constraint ensures loose alignment - allowing the downstream and feedback weights to roughly align from the beginning. These results provide insights into the neural mechanisms underlying the learning of state representation and value, highlighting the potential of random feedback and biological constraints.",
+      "year": 2025,
+      "authors": [
+        {
+          "name": "Takayuki Tsurumi",
+          "id": ""
+        },
+        {
+          "name": "Ayaka Kato",
+          "id": ""
+        },
+        {
+          "name": "Arvind Kumar",
+          "id": ""
+        },
+        {
+          "name": "Kenji Morita",
+          "id": ""
+        }
+      ],
+      "venue": "bioRxiv",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:271953764",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.7737702063562658,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 30248962,
+      "title": "Learning to Adapt by Minimizing Discrepancy",
+      "abstract": "We explore whether useful temporal neural generative models can be learned from sequential data without back-propagation through time. We investigate the viability of a more neurocognitively-grounded approach in the context of unsupervised generative modeling of sequences. Specifically, we build on the concept of predictive coding, which has gained influence in cognitive science, in a neural framework. To do so we develop a novel architecture, the Temporal Neural Coding Network, and its learning algorithm, Discrepancy Reduction. The underlying directed generative model is fully recurrent, meaning that it employs structural feedback connections and temporal feedback connections, yielding information propagation cycles that create local learning signals. This facilitates a unified bottom-up and top-down approach for information transfer inside the architecture. Our proposed algorithm shows promise on the bouncing balls generative modeling problem. Further experiments could be conducted to explore the strengths and weaknesses of our approach.",
+      "year": 2017,
+      "authors": [
+        {
+          "name": "Alexander Ororbia",
+          "id": ""
+        },
+        {
+          "name": "P. Haffner",
+          "id": ""
+        },
+        {
+          "name": "D. Reitter",
+          "id": ""
+        },
+        {
+          "name": "C. Lee Giles",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:30248962",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.7620445529172911,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 253581704,
+      "title": "Signal Propagation: The Framework for Learning and Inference in a Forward Pass",
+      "abstract": "We propose a new learning framework, signal propagation (sigprop), for propagating a learning signal and updating neural network parameters via a forward pass, as an alternative to backpropagation (BP). In sigprop, there is only the forward path for inference and learning. So, there are no structural or computational constraints necessary for learning to take place, beyond the inference model itself, such as feedback connectivity, weight transport, or a backward pass, which exist under BP-based approaches. That is, sigprop enables global supervised learning with only a forward path. This is ideal for parallel training of layers or modules. In biology, this explains how neurons without feedback connections can still receive a global learning signal. In hardware, this provides an approach for global supervised learning without backward connectivity. Sigprop by construction has compatibility with models of learning in the brain and in hardware than BP, including alternative approaches relaxing learning constraints. We also demonstrate that sigprop is more efficient in time and memory than they are. To further explain the behavior of sigprop, we provide evidence that sigprop provides useful learning signals in context to BP. To further support relevance to biological and hardware learning, we use sigprop to train continuous time neural networks with the Hebbian updates and train spiking neural networks (SNNs) with only the voltage or with biologically and hardware-compatible surrogate functions.",
+      "year": 2022,
+      "authors": [
+        {
+          "name": "Adam Kohan",
+          "id": ""
+        },
+        {
+          "name": "E. Rietman",
+          "id": ""
+        },
+        {
+          "name": "H. Siegelmann",
+          "id": ""
+        }
+      ],
+      "venue": "IEEE Transactions on Neural Networks and Learning Systems",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:253581704",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.6089978705837173,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 222125076,
+      "title": "Relaxing the Constraints on Predictive Coding Models",
+      "abstract": "Predictive coding is an influential theory of cortical function which posits that the principal computation the brain performs, which underlies both perception and learning, is the minimization of prediction errors. While motivated by high-level notions of variational inference, detailed neurophysiological models of cortical microcircuits which can implements its computations have been developed. Moreover, under certain conditions, predictive coding has been shown to approximate the backpropagation of error algorithm, and thus provides a relatively biologically plausible credit-assignment mechanism for training deep networks. However, standard implementations of the algorithm still involve potentially neurally implausible features such as identical forward and backward weights, backward nonlinear derivatives, and 1-1 error unit connectivity. In this paper, we show that these features are not integral to the algorithm and can be removed either directly or through learning additional sets of parameters with Hebbian update rules without noticeable harm to learning performance. Our work thus relaxes current constraints on potential microcircuit designs and hopefully opens up new regions of the design-space for neuromorphic implementations of predictive coding.",
+      "year": 2020,
+      "authors": [
+        {
+          "name": "Beren Millidge",
+          "id": ""
+        },
+        {
+          "name": "Alexander Tschantz",
+          "id": ""
+        },
+        {
+          "name": "A. Seth",
+          "id": ""
+        },
+        {
+          "name": "C. Buckley",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:222125076",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.60117470277637,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 253116832,
+      "title": "Scaling Laws Beyond Backpropagation",
+      "abstract": "Alternatives to backpropagation have long been studied to better understand how biological brains may learn. Recently, they have also garnered interest as a way to train neural networks more efficiently. By relaxing constraints inherent to backpropagation (e.g., symmetric feedforward and feedback weights, sequential updates), these methods enable promising prospects, such as local learning. However, the tradeoffs between different methods in terms of final task performance, convergence speed, and ultimately compute and data requirements are rarely outlined. In this work, we use scaling laws to study the ability of Direct Feedback Alignment~(DFA) to train causal decoder-only Transformers efficiently. Scaling laws provide an overview of the tradeoffs implied by a modeling decision, up to extrapolating how it might transfer to increasingly large models. We find that DFA fails to offer more efficient scaling than backpropagation: there is never a regime for which the degradation in loss incurred by using DFA is worth the potential reduction in compute budget. Our finding comes at variance with previous beliefs in the alternative training methods community, and highlights the need for holistic empirical approaches to better understand modeling decisions.",
+      "year": 2022,
+      "authors": [
+        {
+          "name": "Matthew J. Filipovich",
+          "id": ""
+        },
+        {
+          "name": "Alessandro Cappelli",
+          "id": ""
+        },
+        {
+          "name": "Daniel Hesslow",
+          "id": ""
+        },
+        {
+          "name": "Julien Launay",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:253116832",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.5973086138898579,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 249375268,
+      "title": "Biologically-plausible backpropagation through arbitrary timespans via local neuromodulators",
+      "abstract": "The spectacular successes of recurrent neural network models where key parameters are adjusted via backpropagation-based gradient descent have inspired much thought as to how biological neuronal networks might solve the corresponding synaptic credit assignment problem. There is so far little agreement, however, as to how biological networks could implement the necessary backpropagation through time, given widely recognized constraints of biological synaptic network signaling architectures. Here, we propose that extra-synaptic diffusion of local neuromodulators such as neuropeptides may afford an effective mode of backpropagation lying within the bounds of biological plausibility. Going beyond existing temporal truncation-based gradient approximations, our approximate gradient-based update rule, ModProp, propagates credit information through arbitrary time steps. ModProp suggests that modulatory signals can act on receiving cells by convolving their eligibility traces via causal, time-invariant and synapse-type-specific filter taps. Our mathematical analysis of ModProp learning, together with simulation results on benchmark temporal tasks, demonstrate the advantage of ModProp over existing biologically-plausible temporal credit assignment rules. These results suggest a potential neuronal mechanism for signaling credit information related to recurrent interactions over a longer time horizon. Finally, we derive an in-silico implementation of ModProp that could serve as a low-complexity and causal alternative to backpropagation through time.",
+      "year": 2022,
+      "authors": [
+        {
+          "name": "Y. Liu",
+          "id": ""
+        },
+        {
+          "name": "Stephen Smith",
+          "id": ""
+        },
+        {
+          "name": "Stefan Mihalas",
+          "id": ""
+        },
+        {
+          "name": "E. Shea-Brown",
+          "id": ""
+        },
+        {
+          "name": "Uygar Sumbul",
+          "id": ""
+        }
+      ],
+      "venue": "Neural Information Processing Systems",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:249375268",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.575630458266401,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 245837828,
+      "title": "PocketNN: Integer-only Training and Inference of Neural Networks via Direct Feedback Alignment and Pocket Activations in Pure C++",
+      "abstract": "Standard deep learning algorithms are implemented using floating-point real numbers. This presents an obstacle for implementing them on low-end devices which may not have dedicated floating-point units (FPUs). As a result, researchers in tinyML have considered machine learning algorithms that can train and run a deep neural network (DNN) on a low-end device using integer operations only. In this paper we propose PocketNN, a light and self-contained proof-of-concept framework in pure C++ for the training and inference of DNNs using only integers. Unlike other approaches, PocketNN directly operates on integers without requiring any explicit quantization algorithms or customized fixed-point formats. This was made possible by pocket activations, which are a family of activation functions devised for integer-only DNNs, and an emerging DNN training algorithm called direct feedback alignment (DFA). Unlike the standard backpropagation (BP), DFA trains each layer independently, thus avoiding integer overflow which is a key problem when using BP with integer-only operations. We used PocketNN to train some DNNs on two well-known datasets, MNIST and Fashion-MNIST. Our experiments show that the DNNs trained with our PocketNN achieved 96.98% and 87.7% accuracies on MNIST and Fashion-MNIST datasets, respectively. The accuracies are very close to the equivalent DNNs trained using BP with floating-point real number operations, such that accuracy degradations were just 1.02%p and 2.09%p, respectively. Finally, our PocketNN has high compatibility and portability for low-end devices as it is open source and implemented in pure C++ without any dependencies.",
+      "year": 2022,
+      "authors": [
+        {
+          "name": "Jae-Su Song",
+          "id": ""
+        },
+        {
+          "name": "Fangzhen Lin",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:245837828",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.5321754656094896,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 246294709,
+      "title": "Error-driven Input Modulation: Solving the Credit Assignment Problem without a Backward Pass",
+      "abstract": "Supervised learning in artificial neural networks typically relies on backpropagation, where the weights are updated based on the error-function gradients and sequentially propagated from the output layer to the input layer. Although this approach has proven effective in a wide domain of applications, it lacks biological plausibility in many regards, including the weight symmetry problem, the dependence of learning on non-local signals, the freezing of neural activity during error propagation, and the update locking problem. Alternative training schemes have been introduced, including sign symmetry, feedback alignment, and direct feedback alignment, but they invariably rely on a backward pass that hinders the possibility of solving all the issues simultaneously. Here, we propose to replace the backward pass with a second forward pass in which the input signal is modulated based on the error of the network. We show that this novel learning rule comprehensively addresses all the above-mentioned issues and can be applied to both fully connected and convolutional models. We test this learning rule on MNIST, CIFAR-10, and CIFAR-100. These results help incorporate biological principles into machine learning.",
+      "year": 2022,
+      "authors": [
+        {
+          "name": "Giorgia Dellaferrera",
+          "id": ""
+        },
+        {
+          "name": "G. Kreiman",
+          "id": ""
+        }
+      ],
+      "venue": "International Conference on Machine Learning",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:246294709",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.519194902548032,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 235390926,
+      "title": "Align, then memorise: the dynamics of learning with feedback alignment",
+      "abstract": "Direct feedback alignment (DFA) is emerging as an efficient and biologically plausible alternative to backpropagation for training deep neural networks. Despite relying on random feedback weights for the backward pass, DFA successfully trains state-of-the-art models such as transformers. On the other hand, it notoriously fails to train convolutional networks. An understanding of the inner workings of DFA to explain these diverging results remains elusive. Here, we propose a theory of feedback alignment algorithms. We first show that learning in shallow networks proceeds in two steps: an alignment phase, where the model adapts its weights to align the approximate gradient with the true gradient of the loss function, is followed by a memorisation phase, where the model focuses on fitting the data. This two-step process has a degeneracy breaking effect: out of all the low-loss solutions in the landscape, a network trained with DFA naturally converges to the solution which maximises gradient alignment. We also identify a key quantity underlying alignment in deep linear networks: the conditioning of the alignment matrices. The latter enables a detailed understanding of the impact of data structure on alignment, and suggests a simple explanation for the well-known failure of DFA to train convolutional neural networks. Numerical experiments on MNIST and CIFAR10 clearly demonstrate degeneracy breaking in deep non-linear networks and show that the align-then-memorize process occurs sequentially from the bottom layers of the network to the top.",
+      "year": 2020,
+      "authors": [
+        {
+          "name": "Maria Refinetti",
+          "id": ""
+        },
+        {
+          "name": "St\u00e9phane d'Ascoli",
+          "id": ""
+        },
+        {
+          "name": "Ruben Ohana",
+          "id": ""
+        },
+        {
+          "name": "Sebastian Goldt",
+          "id": ""
+        }
+      ],
+      "venue": "International Conference on Machine Learning",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:235390926",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.5080680296159547,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 212676266,
+      "title": "Spike-Train Level Direct Feedback Alignment: Sidestepping Backpropagation for On-Chip Training of Spiking Neural Nets",
+      "abstract": "Spiking neural networks (SNNs) present a promising computing model and enable bio-plausible information processing and event-driven based ultra-low power neuromorphic hardware. However, training SNNs to reach the same performances of conventional deep artificial neural networks (ANNs), particularly with error backpropagation (BP) algorithms, poses a significant challenge due to inherent complex dynamics and non-differentiable spike activities of spiking neurons. In this paper, we present the first study on realizing competitive spike-train level backpropagation (BP) like algorithms to enable on-chip training of SNNs. We propose a novel spike-train level direct feedback alignment (ST-DFA) algorithm, which is much more bio-plausible and hardware friendly than BP. Algorithm and hardware co-optimization and efficient online neural signal computation are explored for on-chip implementation of ST-DFA. On the Xilinx ZC706 FPGA board, the proposed hardware-efficient ST-DFA shows excellent performance vs. overhead tradeoffs for real-world speech and image classification applications. SNN neural processors with on-chip ST-DFA training show competitive classification accuracy of 96.27% for the MNIST dataset with 4\u00d7 input resolution reduction and 84.88% for the challenging 16-speaker TI46 speech corpus, respectively. Compared to the hardware implementation of the state-of-the-art BP algorithm HM2-BP, the design of the proposed ST-DFA reduces functional resources by 76.7% and backward training latency by 31.6% while gracefully trading off classification performance.",
+      "year": 2020,
+      "authors": [
+        {
+          "name": "Jeongjun Lee",
+          "id": ""
+        },
+        {
+          "name": "Renqian Zhang",
+          "id": ""
+        },
+        {
+          "name": "Wenrui Zhang",
+          "id": ""
+        },
+        {
+          "name": "Yu Liu",
+          "id": ""
+        },
+        {
+          "name": "Peng Li",
+          "id": ""
+        }
+      ],
+      "venue": "Frontiers in Neuroscience",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:212676266",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.5042735256638591,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 248811533,
+      "title": "A Computational Framework of Cortical Microcircuits Approximates Sign-concordant Random Backpropagation",
+      "abstract": "Several recent studies attempt to address the biological implausibility of the well-known backpropagation (BP) method. While promising methods such as feedback alignment, direct feedback alignment, and their variants like sign-concordant feedback alignment tackle BP's weight transport problem, their validity remains controversial owing to a set of other unsolved issues. In this work, we answer the question of whether it is possible to realize random backpropagation solely based on mechanisms observed in neuroscience. We propose a hypothetical framework consisting of a new microcircuit architecture and its supporting Hebbian learning rules. Comprising three types of cells and two types of synaptic connectivity, the proposed microcircuit architecture computes and propagates error signals through local feedback connections and supports the training of multi-layered spiking neural networks with a globally defined spiking error function. We employ the Hebbian rule operating in local compartments to update synaptic weights and achieve supervised learning in a biologically plausible manner. Finally, we interpret the proposed framework from an optimization point of view and show its equivalence to sign-concordant feedback alignment. The proposed framework is benchmarked on several datasets including MNIST and CIFAR10, demonstrating promising BP-comparable accuracy.",
+      "year": 2022,
+      "authors": [
+        {
+          "name": "Yukun Yang",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:248811533",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.5017862847702228,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 184487681,
+      "title": "Principled Training of Neural Networks with Direct Feedback Alignment",
+      "abstract": "The backpropagation algorithm has long been the canonical training method for neural networks. Modern paradigms are implicitly optimized for it, and numerous guidelines exist to ensure its proper use. Recently, synthetic gradients methods -where the error gradient is only roughly approximated - have garnered interest. These methods not only better portray how biological brains are learning, but also open new computational possibilities, such as updating layers asynchronously. Even so, they have failed to scale past simple tasks like MNIST or CIFAR-10. This is in part due to a lack of standards, leading to ill-suited models and practices forbidding such methods from performing to the best of their abilities. In this work, we focus on direct feedback alignment and present a set of best practices justified by observations of the alignment angles. We characterize a bottleneck effect that prevents alignment in narrow layers, and hypothesize it may explain why feedback alignment methods have yet to scale to large convolutional networks.",
+      "year": 2019,
+      "authors": [
+        {
+          "name": "Julien Launay",
+          "id": ""
+        },
+        {
+          "name": "Iacopo Poli",
+          "id": ""
+        },
+        {
+          "name": "Florent Krzakala",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:184487681",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.5012738214013481,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 269868457,
+      "title": "TIFeD: a Tiny Integer-based Federated learning algorithm with Direct feedback alignment",
+      "abstract": "Training machine and deep learning models directly on extremely resource-constrained devices is the next challenge in the field of tiny machine learning. The related literature in this field is very limited, since most of the solutions focus only on on-device inference or model adaptation through online learning, leaving the training to be carried out on external Cloud services. An interesting technological perspective is to exploit Federated Learning (FL), which allows multiple devices to collaboratively train a shared model in a distributed way. However, the main drawback of state-of-the-art FL algorithms is that they are not suitable for running on tiny devices. For the first time in the literature, in this paper we introduce TIFeD, a Tiny Integer-based Federated learning algorithm with Direct Feedback Alignment (DFA) entirely implemented by using an integer-only arithmetic and being specifically designed to operate on devices with limited resources in terms of memory, computation and energy. Besides the traditional full-network operating modality, in which each device of the FL setting trains the entire neural network on its own local data, we propose an innovative single-layer TIFeD implementation, which enables each device to train only a portion of the neural network model and opens the door to a new way of distributing the learning procedure across multiple devices. The experimental results show the feasibility and effectiveness of the proposed solution. The proposed TIFeD algorithm, with its full-network and single-layer implementations, is made available to the scientific community as a public repository.",
+      "year": 2023,
+      "authors": [
+        {
+          "name": "Luca Colombo",
+          "id": ""
+        },
+        {
+          "name": "Alessandro Falcetta",
+          "id": ""
+        },
+        {
+          "name": "Manuel Roveri",
+          "id": ""
+        }
+      ],
+      "venue": "International Conference on AI-ML-Systems",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:269868457",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.5008680205368926,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 260920441,
+      "title": "LAFD: Local-Differentially Private and Asynchronous Federated Learning With Direct Feedback Alignment",
+      "abstract": "Federated learning is a promising approach for training machine learning models using distributed data from multiple mobile devices. However, privacy concerns arise when sensitive data are used for training. In this paper, we discuss the challenges of applying local differential privacy to federated learning, which is compounded by the limited resources of mobile clients and the asynchronicity of federated learning. To address these challenges, we propose a framework called LAFD, which stands for Local-differentially Private and Asynchronous Federated Learning with Direct Feedback Alignment. LAFD consists of two parts: (a) LFL-DFALS: Local differentially private Federated Learning with Direct Feedback Alignment and Layer Sampling, and (b) AFL-LMTGR: Asynchronous Federated Learning with Local Model Training and Gradient Rebalancing. LFL-DFALS effectively reduces the computation and communication costs via direct feedback alignment and layer sampling during the training process of federated learning. AFL-LMTGR handles the problem of stragglers via local model training and gradient rebalancing. Local model training enables asynchronous federated learning to the participants of the federated learning. In addition, gradient rebalancing mitigates the gap between the local model and aggregated model. We demonstrate the performance of LFL-DFALS and AFL-LMTGR through the experiments using multivariate datasets and image datasets.",
+      "year": 2023,
+      "authors": [
+        {
+          "name": "K. Jung",
+          "id": ""
+        },
+        {
+          "name": "Incheol Baek",
+          "id": ""
+        },
+        {
+          "name": "Soohyung Kim",
+          "id": ""
+        },
+        {
+          "name": "Y. Chung",
+          "id": ""
+        }
+      ],
+      "venue": "IEEE Access",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:260920441",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.5004124751326501,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 57721289,
+      "title": "Efficient Convolutional Neural Network Training with Direct Feedback Alignment",
+      "abstract": "There were many algorithms to substitute the back-propagation (BP) in the deep neural network (DNN) training. However, they could not become popular because their training accuracy and the computational efficiency were worse than BP. One of them was direct feedback alignment (DFA), but it showed low training performance especially for the convolutional neural network (CNN). In this paper, we overcome the limitation of the DFA algorithm by combining with the conventional BP during the CNN training. To improve the training stability, we also suggest the feedback weight initialization method by analyzing the patterns of the fixed random matrices in the DFA. Finally, we propose the new training algorithm, binary direct feedback alignment (BDFA) to minimize the computational cost while maintaining the training accuracy compared with the DFA. In our experiments, we use the CIFAR-10 and CIFAR-100 dataset to simulate the CNN learning from the scratch and apply the BDFA to the online learning based object tracking application to examine the training in the small dataset environment. Our proposed algorithms show better performance than conventional BP in both two different training tasks especially when the dataset is small.",
+      "year": 2019,
+      "authors": [
+        {
+          "name": "Donghyeon Han",
+          "id": ""
+        },
+        {
+          "name": "H. Yoo",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:57721289",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.49461417449140443,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 219179380,
+      "title": "Light-in-the-loop: using a photonics co-processor for scalable training of neural networks",
+      "abstract": "As neural networks grow larger and more complex and data-hungry, training costs are skyrocketing. Especially when lifelong learning is necessary, such as in recommender systems or self-driving cars, this might soon become unsustainable. In this study, we present the first optical co-processor able to accelerate the training phase of digitally-implemented neural networks. We rely on direct feedback alignment as an alternative to backpropagation, and perform the error projection step optically. Leveraging the optical random projections delivered by our co-processor, we demonstrate its use to train a neural network for handwritten digits recognition.",
+      "year": 2020,
+      "authors": [
+        {
+          "name": "Julien Launay",
+          "id": ""
+        },
+        {
+          "name": "Iacopo Poli",
+          "id": ""
+        },
+        {
+          "name": "Kilian Muller",
+          "id": ""
+        },
+        {
+          "name": "I. Carron",
+          "id": ""
+        },
+        {
+          "name": "L. Daudet",
+          "id": ""
+        },
+        {
+          "name": "Florent Krzakala",
+          "id": ""
+        },
+        {
+          "name": "S. Gigan",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:219179380",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.4942637395806882,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 222208739,
+      "title": "Differentially Private Deep Learning with Direct Feedback Alignment",
+      "abstract": "Standard methods for differentially private training of deep neural networks replace back-propagated mini-batch gradients with biased and noisy approximations to the gradient. These modifications to training often result in a privacy-preserving model that is significantly less accurate than its non-private counterpart. We hypothesize that alternative training algorithms may be more amenable to differential privacy. Specifically, we examine the suitability of direct feedback alignment (DFA). We propose the first differentially private method for training deep neural networks with DFA and show that it achieves significant gains in accuracy (often by 10-20%) compared to backprop-based differentially private training on a variety of architectures (fully connected, convolutional) and datasets.",
+      "year": 2020,
+      "authors": [
+        {
+          "name": "Jaewoo Lee",
+          "id": ""
+        },
+        {
+          "name": "Daniel Kifer",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:222208739",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.49194158663358406,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 70349937,
+      "title": "Direct Feedback Alignment With Sparse Connections for Local Learning",
+      "abstract": "Recent advances in deep neural networks (DNNs) owe their success to training algorithms that use backpropagation and gradient-descent. Backpropagation, while highly effective on von Neumann architectures, becomes inefficient when scaling to large networks. Commonly referred to as the weight transport problem, each neuron's dependence on the weights and errors located deeper in the network require exhaustive data movement which presents a key problem in enhancing the performance and energy-efficiency of machine-learning hardware. In this work, we propose a bio-plausible alternative to backpropagation drawing from advances in feedback alignment algorithms in which the error computation at a single synapse reduces to the product of three scalar values. Using a sparse feedback matrix, we show that a neuron needs only a fraction of the information previously used by the feedback alignment algorithms. Consequently, memory and compute can be partitioned and distributed whichever way produces the most efficient forward pass so long as a single error can be delivered to each neuron. We evaluate our algorithm using standard datasets, including ImageNet, to address the concern of scaling to challenging problems. Our results show orders of magnitude improvement in data movement and 2* improvement in multiply-and-accumulate operations over backpropagation. Like previous work, we observe that any variant of feedback alignment suffers significant losses in classification accuracy on deep convolutional neural networks. By transferring trained convolutional layers and training the fully connected layers using direct feedback alignment, we demonstrate that direct feedback alignment can obtain results competitive with backpropagation. Furthermore, we observe that using an extremely sparse feedback matrix, rather than a dense one, results in a small accuracy drop while yielding hardware advantages. All the code and results are available under https://github.com/bcrafton/ssdfa.",
+      "year": 2019,
+      "authors": [
+        {
+          "name": "Brian Crafton",
+          "id": ""
+        },
+        {
+          "name": "A. Parihar",
+          "id": ""
+        },
+        {
+          "name": "Evan Gebhardt",
+          "id": ""
+        },
+        {
+          "name": "A. Raychowdhury",
+          "id": ""
+        }
+      ],
+      "venue": "Frontiers in Neuroscience",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:70349937",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.4225391220055547,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 270199519,
+      "title": "Deep Learning without Weight Symmetry",
+      "abstract": "Backpropagation (BP), a foundational algorithm for training artificial neural networks, predominates in contemporary deep learning. Although highly successful, it is often considered biologically implausible. A significant limitation arises from the need for precise symmetry between connections in the backward and forward pathways to backpropagate gradient signals accurately, which is not observed in biological brains. Researchers have proposed several algorithms to alleviate this symmetry constraint, such as feedback alignment and direct feedback alignment. However, their divergence from backpropagation dynamics presents challenges, particularly in deeper networks and convolutional layers. Here we introduce the Product Feedback Alignment (PFA) algorithm. Our findings demonstrate that PFA closely approximates BP and achieves comparable performance in deep convolutional networks while avoiding explicit weight symmetry. Our results offer a novel solution to the longstanding weight symmetry problem, leading to more biologically plausible learning in deep convolutional networks compared to earlier methods.",
+      "year": 2024,
+      "authors": [
+        {
+          "name": "Ji-An Li",
+          "id": ""
+        },
+        {
+          "name": "M. Benna",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:270199519",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.4187006621372181,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 235436025,
+      "title": "Credit Assignment in Neural Networks through Deep Feedback Control",
+      "abstract": "The success of deep learning sparked interest in whether the brain learns by using similar techniques for assigning credit to each synaptic weight for its contribution to the network output. However, the majority of current attempts at biologically-plausible learning methods are either non-local in time, require highly specific connectivity motives, or have no clear link to any known mathematical optimization method. Here, we introduce Deep Feedback Control (DFC), a new learning method that uses a feedback controller to drive a deep neural network to match a desired output target and whose control signal can be used for credit assignment. The resulting learning rule is fully local in space and time and approximates Gauss-Newton optimization for a wide range of feedback connectivity patterns. To further underline its biological plausibility, we relate DFC to a multi-compartment model of cortical pyramidal neurons with a local voltage-dependent synaptic plasticity rule, consistent with recent theories of dendritic processing. By combining dynamical system theory with mathematical optimization theory, we provide a strong theoretical foundation for DFC that we corroborate with detailed results on toy experiments and standard computer-vision benchmarks.",
+      "year": 2021,
+      "authors": [
+        {
+          "name": "Alexander Meulemans",
+          "id": ""
+        },
+        {
+          "name": "Matilde Tristany Farinha",
+          "id": ""
+        },
+        {
+          "name": "Javier Garc'ia Ord'onez",
+          "id": ""
+        },
+        {
+          "name": "Pau Vilimelis Aceituno",
+          "id": ""
+        },
+        {
+          "name": "J. Sacramento",
+          "id": ""
+        },
+        {
+          "name": "B. Grewe",
+          "id": ""
+        }
+      ],
+      "venue": "Neural Information Processing Systems",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:235436025",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.4121821380027702,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 252668313,
+      "title": "Spike-based local synaptic plasticity: a survey of computational models and neuromorphic circuits",
+      "abstract": "Understanding how biological neural networks carry out learning using spike-based local plasticity mechanisms can lead to the development of real-time, energy-efficient, and adaptive neuromorphic processing systems. A large number of spike-based learning models have recently been proposed following different approaches. However, it is difficult to assess if these models can be easily implemented in neuromorphic hardware, and to compare their features and ease of implementation. To this end, in this survey, we provide an overview of representative brain-inspired synaptic plasticity models and mixed-signal complementary metal\u2013oxide\u2013semiconductor neuromorphic circuits within a unified framework. We review historical, experimental, and theoretical approaches to modeling synaptic plasticity, and we identify computational primitives that can support low-latency and low-power hardware implementations of spike-based learning rules. We provide a common definition of a locality principle based on pre- and postsynaptic neural signals, which we propose as an important requirement for physical implementations of synaptic plasticity circuits. Based on this principle, we compare the properties of these models within the same framework, and describe a set of mixed-signal electronic circuits that can be used to implement their computing principles, and to build efficient on-chip and online learning in neuromorphic processing systems.",
+      "year": 2022,
+      "authors": [
+        {
+          "name": "Lyes Khacef",
+          "id": ""
+        },
+        {
+          "name": "Philipp Klein",
+          "id": ""
+        },
+        {
+          "name": "M. Cartiglia",
+          "id": ""
+        },
+        {
+          "name": "Arianna Rubino",
+          "id": ""
+        },
+        {
+          "name": "G. Indiveri",
+          "id": ""
+        },
+        {
+          "name": "E. Chicca",
+          "id": ""
+        }
+      ],
+      "venue": "Neuromorph. Comput. Eng.",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:252668313",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.409367307866164,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 253237540,
+      "title": "Meta-learning biologically plausible plasticity rules with random feedback pathways",
+      "abstract": "The biological plausibility of backpropagation and its relationship with synaptic plasticity remain open questions. The authors propose a meta-learning approach to discover interpretable plasticity rules to train neural networks under biological constraints. The meta-learned rules boost the learning efficiency via bio-inspired synaptic plasticity. Backpropagation is widely used to train artificial neural networks, but its relationship to synaptic plasticity in the brain is unknown. Some biological models of backpropagation rely on feedback projections that are symmetric with feedforward connections, but experiments do not corroborate the existence of such symmetric backward connectivity. Random feedback alignment offers an alternative model in which errors are propagated backward through fixed, random backward connections. This approach successfully trains shallow models, but learns slowly and does not perform well with deeper models or online learning. In this study, we develop a meta-learning approach to discover interpretable, biologically plausible plasticity rules that improve online learning performance with fixed random feedback connections. The resulting plasticity rules show improved online training of deep models in the low data regime. Our results highlight the potential of meta-learning to discover effective, interpretable learning rules satisfying biological constraints.",
+      "year": 2022,
+      "authors": [
+        {
+          "name": "Navid Shervani-Tabar",
+          "id": ""
+        },
+        {
+          "name": "R. Rosenbaum",
+          "id": ""
+        }
+      ],
+      "venue": "Nature Communications",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:253237540",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.40757651059999683,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 1779661,
+      "title": "Deep Learning",
+      "abstract": null,
+      "year": 2016,
+      "authors": [
+        {
+          "name": "Xingbang Hao",
+          "id": ""
+        },
+        {
+          "name": "Guigang Zhang",
+          "id": ""
+        },
+        {
+          "name": "Shang Ma",
+          "id": ""
+        }
+      ],
+      "venue": "International Journal of Semantic Computing",
+      "journal": null,
+      "url": "https://doi.org/10.1142/S1793351X16500045",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.40742416169469975,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 11505190,
+      "title": "Event-Driven Random Back-Propagation: Enabling Neuromorphic Deep Learning Machines",
+      "abstract": "An ongoing challenge in neuromorphic computing is to devise general and computationally efficient models of inference and learning which are compatible with the spatial and temporal constraints of the brain. The gradient descent back-propagation rule is a powerful algorithm that is ubiquitous in deep learning, but it relies on the immediate availability of network-wide information stored with high-precision memory. However, recent work shows that exact backpropagated weights are not essential for learning deep representations. Here, we demonstrate an event-driven random backpropagation (eRBP) rule that uses an error-modulated synaptic plasticity rule for learning deep representations in neuromorphic computing hardware. The rule is very suitable for implementation in neuromorphic hardware using a two-compartment leaky integrate & fire neuron and a membrane-voltage modulated, spike-driven plasticity rule. Our results show that using eRBP, deep representations are rapidly learned without using backpropagated gradients, achieving nearly identical classification accuracies compared to artificial neural network simulations on GPUs, while being robust to neural and synaptic state quantizations during learning.",
+      "year": 2016,
+      "authors": [
+        {
+          "name": "Emre O. Neftci",
+          "id": ""
+        },
+        {
+          "name": "C. Augustine",
+          "id": ""
+        },
+        {
+          "name": "Somnath Paul",
+          "id": ""
+        },
+        {
+          "name": "Georgios Detorakis",
+          "id": ""
+        }
+      ],
+      "venue": "Frontiers in Neuroscience",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:11505190",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.40648913714387425,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 235367891,
+      "title": "Credit Assignment Through Broadcasting a Global Error Vector",
+      "abstract": "Backpropagation (BP) uses detailed, unit-specific feedback to train deep neural networks (DNNs) with remarkable success. That biological neural circuits appear to perform credit assignment, but cannot implement BP, implies the existence of other powerful learning algorithms. Here, we explore the extent to which a globally broadcast learning signal, coupled with local weight updates, enables training of DNNs. We present both a learning rule, called global error-vector broadcasting (GEVB), and a class of DNNs, called vectorized nonnegative networks (VNNs), in which this learning rule operates. VNNs have vector-valued units and nonnegative weights past the first layer. The GEVB learning rule generalizes three-factor Hebbian learning, updating each weight by an amount proportional to the inner product of the presynaptic activation and a globally broadcast error vector when the postsynaptic unit is active. We prove that these weight updates are matched in sign to the gradient, enabling accurate credit assignment. Moreover, at initialization, these updates are exactly proportional to the gradient in the limit of infinite network width. GEVB matches the performance of BP in VNNs, and in some cases outperforms direct feedback alignment (DFA) applied in conventional networks. Unlike DFA, GEVB successfully trains convolutional layers. Altogether, our theoretical and empirical results point to a surprisingly powerful role for a global learning signal in training DNNs.",
+      "year": 2021,
+      "authors": [
+        {
+          "name": "David G. Clark",
+          "id": ""
+        },
+        {
+          "name": "L. Abbott",
+          "id": ""
+        },
+        {
+          "name": "SueYeon Chung",
+          "id": ""
+        }
+      ],
+      "venue": "Neural Information Processing Systems",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:235367891",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.4061811501601627,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 268733124,
+      "title": "A Review of Neuroscience-Inspired Machine Learning",
+      "abstract": "One major criticism of deep learning centers around the biological implausibility of the credit assignment schema used for learning -- backpropagation of errors. This implausibility translates into practical limitations, spanning scientific fields, including incompatibility with hardware and non-differentiable implementations, thus leading to expensive energy requirements. In contrast, biologically plausible credit assignment is compatible with practically any learning condition and is energy-efficient. As a result, it accommodates hardware and scientific modeling, e.g. learning with physical systems and non-differentiable behavior. Furthermore, it can lead to the development of real-time, adaptive neuromorphic processing systems. In addressing this problem, an interdisciplinary branch of artificial intelligence research that lies at the intersection of neuroscience, cognitive science, and machine learning has emerged. In this paper, we survey several vital algorithms that model bio-plausible rules of credit assignment in artificial neural networks, discussing the solutions they provide for different scientific fields as well as their advantages on CPUs, GPUs, and novel implementations of neuromorphic hardware. We conclude by discussing the future challenges that will need to be addressed in order to make such algorithms more useful in practical applications.",
+      "year": 2024,
+      "authors": [
+        {
+          "name": "Alexander Ororbia",
+          "id": ""
+        },
+        {
+          "name": "A. Mali",
+          "id": ""
+        },
+        {
+          "name": "Adam Kohan",
+          "id": ""
+        },
+        {
+          "name": "Beren Millidge",
+          "id": ""
+        },
+        {
+          "name": "Tommaso Salvatori",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:268733124",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.4059125629511859,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 211818011,
+      "title": "Two Routes to Scalable Credit Assignment without Weight Symmetry",
+      "abstract": "The neural plausibility of backpropagation has long been disputed, primarily for its use of non-local weight transport $-$ the biologically dubious requirement that one neuron instantaneously measure the synaptic weights of another. Until recently, attempts to create local learning rules that avoid weight transport have typically failed in the large-scale learning scenarios where backpropagation shines, e.g. ImageNet categorization with deep convolutional networks. Here, we investigate a recently proposed local learning rule that yields competitive performance with backpropagation and find that it is highly sensitive to metaparameter choices, requiring laborious tuning that does not transfer across network architecture. Our analysis indicates the underlying mathematical reason for this instability, allowing us to identify a more robust local learning rule that better transfers without metaparameter tuning. Nonetheless, we find a performance and stability gap between this local rule and backpropagation that widens with increasing model depth. We then investigate several non-local learning rules that relax the need for instantaneous weight transport into a more biologically-plausible \"weight estimation\" process, showing that these rules match state-of-the-art performance on deep networks and operate effectively in the presence of noisy updates. Taken together, our results suggest two routes towards the discovery of neural implementations for credit assignment without weight symmetry: further improvement of local rules so that they perform consistently across architectures and the identification of biological implementations for non-local learning mechanisms.",
+      "year": 2020,
+      "authors": [
+        {
+          "name": "D. Kunin",
+          "id": ""
+        },
+        {
+          "name": "Aran Nayebi",
+          "id": ""
+        },
+        {
+          "name": "Javier Sagastuy-Bre\u00f1a",
+          "id": ""
+        },
+        {
+          "name": "S. Ganguli",
+          "id": ""
+        },
+        {
+          "name": "Jonathan M. Bloom",
+          "id": ""
+        },
+        {
+          "name": "Daniel L. K. Yamins",
+          "id": ""
+        }
+      ],
+      "venue": "International Conference on Machine Learning",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:211818011",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.4057331633430524,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 270063037,
+      "title": "Pretraining with Random Noise for Fast and Robust Learning without Weight Transport",
+      "abstract": "The brain prepares for learning even before interacting with the environment, by refining and optimizing its structures through spontaneous neural activity that resembles random noise. However, the mechanism of such a process has yet to be thoroughly understood, and it is unclear whether this process can benefit the algorithm of machine learning. Here, we study this issue using a neural network with a feedback alignment algorithm, demonstrating that pretraining neural networks with random noise increases the learning efficiency as well as generalization abilities without weight transport. First, we found that random noise training modifies forward weights to match backward synaptic feedback, which is necessary for teaching errors by feedback alignment. As a result, a network with pre-aligned weights learns notably faster than a network without random noise training, even reaching a convergence speed comparable to that of a backpropagation algorithm. Sequential training with both random noise and data brings weights closer to synaptic feedback than training solely with data, enabling more precise credit assignment and faster learning. We also found that each readout probability approaches the chance level and that the effective dimensionality of weights decreases in a network pretrained with random noise. This pre-regularization allows the network to learn simple solutions of a low rank, reducing the generalization loss during subsequent training. This also enables the network robustly to generalize a novel, out-of-distribution dataset. Lastly, we confirmed that random noise pretraining reduces the amount of meta-loss, enhancing the network ability to adapt to various tasks. Overall, our results suggest that random noise training with feedback alignment offers a straightforward yet effective method of pretraining that facilitates quick and reliable learning without weight transport.",
+      "year": 2024,
+      "authors": [
+        {
+          "name": "Jeonghwan Cheon",
+          "id": ""
+        },
+        {
+          "name": "Sang Wan Lee",
+          "id": ""
+        },
+        {
+          "name": "Se-Bum Paik",
+          "id": ""
+        }
+      ],
+      "venue": "Neural Information Processing Systems",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:270063037",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.4048630820869735,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 256184050,
+      "title": "Supervised Learning Algorithm Based on Spike Train Inner Product for Deep Spiking Neural Networks",
+      "abstract": "By mimicking the hierarchical structure of human brain, deep spiking neural networks (DSNNs) can extract features from a lower level to a higher level gradually, and improve the performance for the processing of spatio-temporal information. Due to the complex hierarchical structure and implicit nonlinear mechanism, the formulation of spike train level supervised learning methods for DSNNs remains an important problem in this research area. Based on the definition of kernel function and spike trains inner product (STIP) as well as the idea of error backpropagation (BP), this paper firstly proposes a deep supervised learning algorithm for DSNNs named BP-STIP. Furthermore, in order to alleviate the intrinsic weight transport problem of the BP mechanism, feedback alignment (FA) and broadcast alignment (BA) mechanisms are utilized to optimize the error feedback mode of BP-STIP, and two deep supervised learning algorithms named FA-STIP and BA-STIP are also proposed. In the experiments, the effectiveness of the proposed three DSNN algorithms is verified on the MNIST digital image benchmark dataset, and the influence of different kernel functions on the learning performance of DSNNs with different network scales is analyzed. Experimental results show that the FA-STIP and BP-STIP algorithms can achieve 94.73% and 95.65% classification accuracy, which apparently possess better learning performance and stability compared with the benchmark algorithm BP-STIP.",
+      "year": 2023,
+      "authors": [
+        {
+          "name": "Xianghong Lin",
+          "id": ""
+        },
+        {
+          "name": "Zhen Zhang",
+          "id": ""
+        },
+        {
+          "name": "Donghao Zheng",
+          "id": ""
+        }
+      ],
+      "venue": "Brain Science",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:256184050",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.4033925567082857,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 270702932,
+      "title": "Towards Biologically Plausible Computing: A Comprehensive Comparison",
+      "abstract": "Backpropagation is a cornerstone algorithm in training neural networks for supervised learning, which uses a gradient descent method to update network weights by minimizing the discrepancy between actual and desired outputs. Despite its pivotal role in propelling deep learning advancements, the biological plausibility of backpropagation is questioned due to its requirements for weight symmetry, global error computation, and dual-phase training. To address this long-standing challenge, many studies have endeavored to devise biologically plausible training algorithms. However, a fully biologically plausible algorithm for training multilayer neural networks remains elusive, and interpretations of biological plausibility vary among researchers. In this study, we establish criteria for biological plausibility that a desirable learning algorithm should meet. Using these criteria, we evaluate a range of existing algorithms considered to be biologically plausible, including Hebbian learning, spike-timing-dependent plasticity, feedback alignment, target propagation, predictive coding, forward-forward algorithm, perturbation learning, local losses, and energy-based learning. Additionally, we empirically evaluate these algorithms across diverse network architectures and datasets. We compare the feature representations learned by these algorithms with brain activity recorded by non-invasive devices under identical stimuli, aiming to identify which algorithm can most accurately replicate brain activity patterns. We are hopeful that this study could inspire the development of new biologically plausible algorithms for training multilayer networks, thereby fostering progress in both the fields of neuroscience and machine learning.",
+      "year": 2024,
+      "authors": [
+        {
+          "name": "Changze Lv",
+          "id": ""
+        },
+        {
+          "name": "Yufei Gu",
+          "id": ""
+        },
+        {
+          "name": "Zhengkang Guo",
+          "id": ""
+        },
+        {
+          "name": "Zhibo Xu",
+          "id": ""
+        },
+        {
+          "name": "Yixin Wu",
+          "id": ""
+        },
+        {
+          "name": "Feiran Zhang",
+          "id": ""
+        },
+        {
+          "name": "Tianyuan Shi",
+          "id": ""
+        },
+        {
+          "name": "Zhenghua Wang",
+          "id": ""
+        },
+        {
+          "name": "Ruicheng Yin",
+          "id": ""
+        },
+        {
+          "name": "Y. Shang",
+          "id": ""
+        },
+        {
+          "name": "Siqi Zhong",
+          "id": ""
+        },
+        {
+          "name": "Xiaohua Wang",
+          "id": ""
+        },
+        {
+          "name": "Muling Wu",
+          "id": ""
+        },
+        {
+          "name": "Wenhao Liu",
+          "id": ""
+        },
+        {
+          "name": "Tianlong Li",
+          "id": ""
+        },
+        {
+          "name": "Jianhao Zhu",
+          "id": ""
+        },
+        {
+          "name": "Cenyuan Zhang",
+          "id": ""
+        },
+        {
+          "name": "Zixuan Ling",
+          "id": ""
+        },
+        {
+          "name": "Xiaoqing Zheng",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:270702932",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.40324159932690584,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 247627835,
+      "title": "Constrained Parameter Inference as a Principle for Learning",
+      "abstract": "Learning in neural networks is often framed as a problem in which targeted error signals are directly propagated to parameters and used to produce updates that induce more optimal network behaviour. Backpropagation of error (BP) is an example of such an approach and has proven to be a highly successful application of stochastic gradient descent to deep neural networks. We propose constrained parameter inference (COPI) as a new principle for learning. The COPI approach assumes that learning can be set up in a manner where parameters infer their own values based upon observations of their local neuron activities. We find that this estimation of network parameters is possible under the constraints of decorrelated neural inputs and top-down perturbations of neural states for credit assignment. We show that the decorrelation required for COPI allows learning at extremely high learning rates, competitive with that of adaptive optimizers, as used by BP. We further demonstrate that COPI affords a new approach to feature analysis and network compression. Finally, we argue that COPI may shed new light on learning in biological networks given the evidence for decorrelation in the brain.",
+      "year": 2022,
+      "authors": [
+        {
+          "name": "Nasir Ahmad",
+          "id": ""
+        },
+        {
+          "name": "E. Schrader",
+          "id": ""
+        },
+        {
+          "name": "M. Gerven",
+          "id": ""
+        }
+      ],
+      "venue": "Trans. Mach. Learn. Res.",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:247627835",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.40300641767376744,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 265220980,
+      "title": "Zenkai - Framework For Exploring Beyond Backpropagation",
+      "abstract": "Zenkai is an open-source framework designed to give researchers more control and flexibility over building and training deep learning machines. It does this by dividing the deep learning machine into layers of semi-autonomous learning machines with their own target and learning algorithm. This is to allow researchers greater exploration such as the use of non-differentiable layers or learning algorithms beyond those based on error backpropagation. Backpropagation Rumelhart et al. [1986] has powered deep learning to become one of the most exciting fields of the 21st century. As a result, a large number of software tools have been developed to support efficient implementation and training of neural networks through the use of backpropa- gation. While these have been critical to the success of deep learning, building frameworks around backpropagation can make it challenging to implement solutions that do not adhere to it. Zenkai aims to make it easier to get around these limitations and help researchers more easily explore new frontiers in deep learning that do not strictly adhere to the backpropagation framework.",
+      "year": 2023,
+      "authors": [
+        {
+          "name": "G. Short",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:265220980",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.40059616836363937,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 251253183,
+      "title": "Biologically Plausible Training of Deep Neural Networks Using a Top-down Credit Assignment Network",
+      "abstract": "Despite the widespread adoption of Backpropagation algorithm-based Deep Neural Networks, the biological infeasibility of the BP algorithm could potentially limit the evolution of new DNN models. To find a biologically plausible algorithm to replace BP, we focus on the top-down mechanism inherent in the biological brain. Although top-down connections in the biological brain play crucial roles in high-level cognitive functions, their application to neural network learning remains unclear. This study proposes a two-level training framework designed to train a bottom-up network using a Top-Down Credit Assignment Network (TDCA-network). The TDCA-network serves as a substitute for the conventional loss function and the back-propagation algorithm, widely used in neural network training. We further introduce a brain-inspired credit diffusion mechanism, significantly reducing the TDCA-network's parameter complexity, thereby greatly accelerating training without compromising the network's performance.Our experiments involving non-convex function optimization, supervised learning, and reinforcement learning reveal that a well-trained TDCA-network outperforms back-propagation across various settings. The visualization of the update trajectories in the loss landscape indicates the TDCA-network's ability to bypass local minima where BP-based trajectories typically become trapped. The TDCA-network also excels in multi-task optimization, demonstrating robust generalizability across different datasets in supervised learning and unseen task settings in reinforcement learning. Moreover, the results indicate that the TDCA-network holds promising potential to train neural networks across diverse architectures.",
+      "year": 2022,
+      "authors": [
+        {
+          "name": "Jianhui Chen",
+          "id": ""
+        },
+        {
+          "name": "Chenglin Liu",
+          "id": ""
+        },
+        {
+          "name": "Zuoren Wang",
+          "id": ""
+        }
+      ],
+      "venue": "",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:251253183",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.40056157645622076,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 201645403,
+      "title": "Spiking Neural Predictive Coding for Continual Learning from Data Streams",
+      "abstract": "For energy-efficient computation in specialized neuromorphic hardware, we present the Spiking Neural Coding Network, an instantiation of a family of artificial neural models strongly motivated by the theory of predictive coding. The model, in essence, works by operating in a never-ending process of \"guess-and-check\", where neurons predict the activity values of one another and then immediately adjust their own activities to make better future predictions. The interactive, iterative nature of our neural system fits well into the continuous time formulation of data sensory stream prediction and, as we show, the model's structure yields a simple, local synaptic update rule, which could be used to complement or replace online spike-timing dependent plasticity. In this article, we experiment with an instantiation of our model that consists of leaky integrate-and-fire units. However, the general framework within which our model is situated can naturally incorporate more complex, formal neurons such as the Hodgkin-Huxley model. Our experimental results in pattern recognition demonstrate the potential of the proposed model when binary spike trains are the primary paradigm for inter-neuron communication. Notably, our model is competitive in terms of classification performance, can conduct online semi-supervised learning, naturally experiences less forgetting when learning from a sequence of tasks, and is more computationally economical and biologically-plausible than popular artificial neural networks.",
+      "year": 2019,
+      "authors": [
+        {
+          "name": "Alexander Ororbia",
+          "id": ""
+        }
+      ],
+      "venue": "Neurocomputing",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:201645403",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.3986516623151603,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 3677499,
+      "title": "Conducting Credit Assignment by Aligning Local Representations",
+      "abstract": "Using back-propagation and its variants to train deep networks is often problematic for new users. Issues such as exploding gradients, vanishing gradients, and high sensitivity to weight initialization strategies often make networks difficult to train, especially when users are experimenting with new architectures. Here, we present Local Representation Alignment (LRA), a training procedure that is much less sensitive to bad initializations, does not require modifications to the network architecture, and can be adapted to networks with highly nonlinear and discrete-valued activation functions. Furthermore, we show that one variation of LRA can start with a null initialization of network weights and still successfully train networks with a wide variety of nonlinearities, including tanh, ReLU-6, softplus, signum and others that may draw their inspiration from biology. A comprehensive set of experiments on MNIST and the much harder Fashion MNIST data sets show that LRA can be used to train networks robustly and effectively, succeeding even when back-propagation fails and outperforming other alternative learning algorithms, such as target propagation and feedback alignment.",
+      "year": 2018,
+      "authors": [
+        {
+          "name": "Alexander Ororbia",
+          "id": ""
+        },
+        {
+          "name": "A. Mali",
+          "id": ""
+        },
+        {
+          "name": "Daniel Kifer",
+          "id": ""
+        },
+        {
+          "name": "C. Lee Giles",
+          "id": ""
+        }
+      ],
+      "venue": "",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:3677499",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.3948479011669072,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 259362682,
+      "title": "Backpropagation-Free Deep Learning with Recursive Local Representation Alignment",
+      "abstract": "Training deep neural networks on large-scale datasets requires significant hardware resources whose costs (even on cloud platforms) put them out of reach of smaller organizations, groups, and individuals. Backpropagation (backprop), the workhorse for training these networks, is an inherently sequential process that is difficult to parallelize. Furthermore, researchers must continually develop various specialized techniques, such as particular weight initializations and enhanced activation functions, to ensure stable parameter optimization. Our goal is to seek an effective, neuro-biologically plausible alternative to backprop that can be used to train deep networks. In this paper, we propose a backprop-free procedure, recursive local representation alignment, for training large-scale architectures. Experiments with residual networks on CIFAR-10 and the large benchmark, ImageNet, show that our algorithm generalizes as well as backprop while converging sooner due to weight updates that are parallelizable and computationally less demanding. This is empirical evidence that a backprop-free algorithm can scale up to larger datasets.",
+      "year": 2023,
+      "authors": [
+        {
+          "name": "Alexander Ororbia",
+          "id": ""
+        },
+        {
+          "name": "A. Mali",
+          "id": ""
+        },
+        {
+          "name": "Daniel Kifer",
+          "id": ""
+        },
+        {
+          "name": "C. L. Giles",
+          "id": ""
+        }
+      ],
+      "venue": "AAAI Conference on Artificial Intelligence",
+      "journal": null,
+      "url": "https://doi.org/10.1609/aaai.v37i8.26118",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.3944772499874361,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 267412150,
+      "title": "Benchmarking Spiking Neural Network Learning Methods With Varying Locality",
+      "abstract": "Spiking Neural Networks (SNNs), providing more realistic neuronal dynamics, have shown to achieve performance comparable to Artificial Neural Networks (ANNs) in several machine learning tasks. Information is processed as spikes within SNNs in an event-based mechanism that significantly reduces energy consumption. However, training SNNs is challenging due to the non-differentiable nature of the spiking mechanism. Traditional approaches, such as Backpropagation Through Time (BPTT), have shown effectiveness but comes with additional computational and memory costs and are biologically implausible. In contrast, recent works propose alternative learning methods with varying degrees of locality, demonstrating success in classification tasks. In this work, we show that these methods share similarities during the training process, while they present a trade-off between biological plausibility and performance. Further, this research examines the implicitly recurrent nature of SNNs and investigates the influence of addition of explicit recurrence to SNNs. We experimentally prove that the addition of explicit recurrent weights enhances the robustness of SNNs. We also investigate the performance of local learning methods under gradient and non-gradient based adversarial attacks.",
+      "year": 2024,
+      "authors": [
+        {
+          "name": "Jiaqi Lin",
+          "id": ""
+        },
+        {
+          "name": "Sen Lu",
+          "id": ""
+        },
+        {
+          "name": "Malyaban Bal",
+          "id": ""
+        },
+        {
+          "name": "Abhronil Sengupta",
+          "id": ""
+        }
+      ],
+      "venue": "IEEE Access",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:267412150",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.39199253757074826,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 15470198,
+      "title": "Bidirectional Backpropagation: Towards Biologically Plausible Error Signal Transmission in Neural Networks",
+      "abstract": "The back-propagation (BP) algorithm has been considered the de-facto method for training deep neural networks. It back-propagates errors from the output layer to the hidden layers in an exact manner using the transpose of the feedforward weights. However, it has been argued that this is not biologically plausible because back-propagating error signals with the exact incoming weights is not considered possible in biological neural systems. In this work, we propose a biologically plausible paradigm of neural architecture based on related literature in neuroscience and asymmetric BP-like methods. Specifically, we propose two bidirectional learning algorithms with trainable feedforward and feedback weights. The feedforward weights are used to relay activations from the inputs to target outputs. The feedback weights pass the error signals from the output layer to the hidden layers. Different from other asymmetric BP-like methods, the feedback weights are also plastic in our framework and are trained to approximate the forward activations. Preliminary results show that our models outperform other asymmetric BP-like methods on the MNIST and the CIFAR-10 datasets.",
+      "year": 2017,
+      "authors": [
+        {
+          "name": "Hongyin Luo",
+          "id": ""
+        },
+        {
+          "name": "Jie Fu",
+          "id": ""
+        },
+        {
+          "name": "James R. Glass",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:15470198",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.38553841716497594,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 86850556,
+      "title": "Ghost Units Yield Biologically Plausible Backprop in Deep Neural Networks",
+      "abstract": "In the past few years, deep learning has transformed artificial intelligence research and led to impressive performance in various difficult tasks. However, it is still unclear how the brain can perform credit assignment across many areas as efficiently as backpropagation does in deep neural networks. In this paper, we introduce a model that relies on a new role for a neuronal inhibitory machinery, referred to as ghost units. By cancelling the feedback coming from the upper layer when no target signal is provided to the top layer, the ghost units enables the network to backpropagate errors and do efficient credit assignment in deep structures. While considering one-compartment neurons and requiring very few biological assumptions, it is able to approximate the error gradient and achieve good performance on classification tasks. Error backpropagation occurs through the recurrent dynamics of the network and thanks to biologically plausible local learning rules. In particular, it does not require separate feedforward and feedback circuits. Different mechanisms for cancelling the feedback were studied, ranging from complete duplication of the connectivity by long term processes to online replication of the feedback activity. This reduced system combines the essential elements to have a working biologically abstracted analogue of backpropagation with a simple formulation and proofs of the associated results. Therefore, this model is a step towards understanding how learning and memory are implemented in cortical multilayer structures, but it also raises interesting perspectives for neuromorphic hardware.",
+      "year": 2019,
+      "authors": [
+        {
+          "name": "Thomas Mesnard",
+          "id": ""
+        },
+        {
+          "name": "Gaetan Vignoud",
+          "id": ""
+        },
+        {
+          "name": "J. Sacramento",
+          "id": ""
+        },
+        {
+          "name": "W. Senn",
+          "id": ""
+        },
+        {
+          "name": "Yoshua Bengio",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:86850556",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.3840209542162914,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 221818760,
+      "title": "Feed-Forward On-Edge Fine-tuning Using Static Synthetic Gradient Modules",
+      "abstract": "Training deep learning models on embedded devices is typically avoided since this requires more memory, computation and power over inference. In this work, we focus on lowering the amount of memory needed for storing all activations, which are required during the backward pass to compute the gradients. Instead, during the forward pass, static Synthetic Gradient Modules (SGMs) predict gradients for each layer. This allows training the model in a feed-forward manner without having to store all activations. We tested our method on a robot grasping scenario where a robot needs to learn to grasp new objects given only a single demonstration. By first training the SGMs in a meta-learning manner on a set of common objects, during fine-tuning, the SGMs provided the model with accurate gradients to successfully learn to grasp new objects. We have shown that our method has comparable results to using standard backpropagation.",
+      "year": 2020,
+      "authors": [
+        {
+          "name": "R. Neven",
+          "id": ""
+        },
+        {
+          "name": "M. Verhelst",
+          "id": ""
+        },
+        {
+          "name": "T. Tuytelaars",
+          "id": ""
+        },
+        {
+          "name": "Toon Goedem'e",
+          "id": ""
+        }
+      ],
+      "venue": "ECCV Workshops",
+      "journal": null,
+      "url": "https://arxiv.org/pdf/2009.09675.pdf",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.3819613602839836,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 76667846,
+      "title": "Deep Learning With Asymmetric Connections and Hebbian Updates",
+      "abstract": "We show that deep networks can be trained using Hebbian updates yielding similar performance to ordinary back-propagation on challenging image datasets. To overcome the unrealistic symmetry in connections between layers, implicit in back-propagation, the feedback weights are separate from the feedforward weights. The feedback weights are also updated with a local rule, the same as the feedforward weights-a weight is updated solely based on the product of activity of the units it connects. With fixed feedback weights as proposed in Lillicrap et al. (2016) performance degrades quickly as the depth of the network increases. If the feedforward and feedback weights are initialized with the same values, as proposed in Zipser and Rumelhart (1990), they remain the same throughout training thus precisely implementing back-propagation. We show that even when the weights are initialized differently and at random, and the algorithm is no longer performing back-propagation, performance is comparable on challenging datasets. We also propose a cost function whose derivative can be represented as a local Hebbian update on the last layer. Convolutional layers are updated with tied weights across space, which is not biologically plausible. We show that similar performance is achieved with untied layers, also known as locally connected layers, corresponding to the connectivity implied by the convolutional layers, but where weights are untied and updated separately. In the linear case we show theoretically that the convergence of the error to zero is accelerated by the update of the feedback weights.",
+      "year": 2018,
+      "authors": [
+        {
+          "name": "Y. Amit",
+          "id": ""
+        }
+      ],
+      "venue": "Frontiers in Computational Neuroscience",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:76667846",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.3541018533521625,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 252111053,
+      "title": "Multimodal Speech Enhancement Using Burst Propagation",
+      "abstract": "This paper proposes the MBURST, a novel multimodal solution for audio-visual speech enhancements that consider the most recent neurological discoveries regarding pyramidal cells of the prefrontal cortex and other brain regions. The so-called burst propagation implements several criteria to address the credit assignment problem in a more biologically plausible manner: steering the sign and magnitude of plasticity through feedback, multiplexing the feedback and feedforward information across layers through different weight connections, approximating feedback and feedforward connections, and linearizing the feedback signals. MBURST benefits from such capabilities to learn correlations between the noisy signal and the visual stimuli, thus attributing meaning to the speech by amplifying relevant information and suppressing noise. Experiments conducted over a Grid Corpus and CHiME3-based dataset show that MBURST can reproduce similar mask reconstructions to the multimodal backpropagation-based baseline while demonstrating outstanding energy efficiency management, reducing the neuron firing rates to values up to \\textbf{$70\\%$} lower. Such a feature implies more sustainable implementations, suitable and desirable for hearing aids or any other similar embedded systems.",
+      "year": 2022,
+      "authors": [
+        {
+          "name": "L. A. Passos",
+          "id": ""
+        },
+        {
+          "name": "K. Ahmed",
+          "id": ""
+        },
+        {
+          "name": "Mohsin Raza",
+          "id": ""
+        },
+        {
+          "name": "A. Adeel",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:252111053",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.34629182809807246,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 259262384,
+      "title": "S-TLLR: STDP-inspired Temporal Local Learning Rule for Spiking Neural Networks",
+      "abstract": "Spiking Neural Networks (SNNs) are biologically plausible models that have been identified as potentially apt for deploying energy-efficient intelligence at the edge, particularly for sequential learning tasks. However, training of SNNs poses significant challenges due to the necessity for precise temporal and spatial credit assignment. Back-propagation through time (BPTT) algorithm, whilst the most widely used method for addressing these issues, incurs high computational cost due to its temporal dependency. In this work, we propose S-TLLR, a novel three-factor temporal local learning rule inspired by the Spike-Timing Dependent Plasticity (STDP) mechanism, aimed at training deep SNNs on event-based learning tasks. Furthermore, S-TLLR is designed to have low memory and time complexities, which are independent of the number of time steps, rendering it suitable for online learning on low-power edge devices. To demonstrate the scalability of our proposed method, we have conducted extensive evaluations on event-based datasets spanning a wide range of applications, such as image and gesture recognition, audio classification, and optical flow estimation. In all the experiments, S-TLLR achieved high accuracy, comparable to BPTT, with a reduction in memory between $5-50\\times$ and multiply-accumulate (MAC) operations between $1.3-6.6\\times$.",
+      "year": 2023,
+      "authors": [
+        {
+          "name": "M. Apolinario",
+          "id": ""
+        },
+        {
+          "name": "Kaushik Roy",
+          "id": ""
+        }
+      ],
+      "venue": "Trans. Mach. Learn. Res.",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:259262384",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.34512945052305116,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 219531128,
+      "title": "Scaling Equilibrium Propagation to Deep ConvNets by Drastically Reducing Its Gradient Estimator Bias",
+      "abstract": "Equilibrium Propagation is a biologically-inspired algorithm that trains convergent recurrent neural networks with a local learning rule. This approach constitutes a major lead to allow learning-capable neuromophic systems and comes with strong theoretical guarantees. Equilibrium propagation operates in two phases, during which the network is let to evolve freely and then \"nudged\" toward a target; the weights of the network are then updated based solely on the states of the neurons that they connect. The weight updates of Equilibrium Propagation have been shown mathematically to approach those provided by Backpropagation Through Time (BPTT), the mainstream approach to train recurrent neural networks, when nudging is performed with infinitely small strength. In practice, however, the standard implementation of Equilibrium Propagation does not scale to visual tasks harder than MNIST. In this work, we show that a bias in the gradient estimate of equilibrium propagation, inherent in the use of finite nudging, is responsible for this phenomenon and that canceling it allows training deep convolutional neural networks. We show that this bias can be greatly reduced by using symmetric nudging (a positive nudging and a negative one). We also generalize Equilibrium Propagation to the case of cross-entropy loss (by opposition to squared error). As a result of these advances, we are able to achieve a test error of 11.7% on CIFAR-10, which approaches the one achieved by BPTT and provides a major improvement with respect to the standard Equilibrium Propagation that gives 86% test error. We also apply these techniques to train an architecture with unidirectional forward and backward connections, yielding a 13.2% test error. These results highlight equilibrium propagation as a compelling biologically-plausible approach to compute error gradients in deep neuromorphic systems.",
+      "year": 2020,
+      "authors": [
+        {
+          "name": "Axel Laborieux",
+          "id": ""
+        },
+        {
+          "name": "M. Ernoult",
+          "id": ""
+        },
+        {
+          "name": "B. Scellier",
+          "id": ""
+        },
+        {
+          "name": "Yoshua Bengio",
+          "id": ""
+        },
+        {
+          "name": "J. Grollier",
+          "id": ""
+        },
+        {
+          "name": "D. Querlioz",
+          "id": ""
+        }
+      ],
+      "venue": "Frontiers in Neuroscience",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:219531128",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.34336933812194403,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 254535745,
+      "title": "Is Bio-Inspired Learning Better than Backprop? Benchmarking Bio Learning vs. Backprop",
+      "abstract": "Bio-inspired learning has been gaining popularity recently given that Backpropagation (BP) is not considered biologically plausible. Many algorithms have been proposed in the literature which are all more biologically plausible than BP. However, apart from overcoming the biological implausibility of BP, a strong motivation for using Bio-inspired algorithms remains lacking. In this study, we undertake a holistic comparison of BP vs. multiple Bio-inspired algorithms to answer the question of whether Bio-learning offers additional benefits over BP. We test Bio-algorithms under different design choices such as access to only partial training data, resource constraints in terms of the number of training epochs, sparsification of the neural network parameters and addition of noise to input samples. Through these experiments, we notably find two key advantages of Bio-algorithms over BP. Firstly, Bio-algorithms perform much better than BP when the entire training dataset is not supplied. Four of the five Bio-algorithms tested outperform BP by upto 5% accuracy when only 20% of the training dataset is available. Secondly, even when the full dataset is available, Bio-algorithms learn much quicker and converge to a stable accuracy in far lesser training epochs than BP. Hebbian learning, specifically, is able to learn in just 5 epochs compared to around 100 epochs required by BP. These insights present practical reasons for utilising Bio-learning beyond just their biological plausibility and also point towards interesting new directions for future work on Bio-learning.",
+      "year": 2022,
+      "authors": [
+        {
+          "name": "Manas Gupta",
+          "id": ""
+        },
+        {
+          "name": "Sarthak Ketanbhai Modi",
+          "id": ""
+        },
+        {
+          "name": "Hang Zhang",
+          "id": ""
+        },
+        {
+          "name": "Joonhun Lee",
+          "id": ""
+        },
+        {
+          "name": "J. Lim",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:254535745",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.3381831349835729,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    }
+  ]
+}

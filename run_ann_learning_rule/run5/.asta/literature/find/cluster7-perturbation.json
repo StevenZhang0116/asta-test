@@ -1,0 +1,605 @@
+{
+  "query": "node perturbation learning recurrent network reward-modulated Hebbian Miconi",
+  "results": [
+    {
+      "corpusId": 16726905,
+      "title": "Biologically plausible learning in recurrent neural networks reproduces neural dynamics observed during cognitive tasks",
+      "abstract": "Neural activity during cognitive tasks exhibits complex dynamics that flexibly encode task-relevant variables. Chaotic recurrent networks, which spontaneously generate rich dynamics, have been proposed as a model of cortical computation during cognitive tasks. However, existing methods for training these networks are either biologically implausible, and/or require a continuous, real-time error signal to guide learning. Here we show that a biologically plausible learning rule can train such recurrent networks, guided solely by delayed, phasic rewards at the end of each trial. Networks endowed with this learning rule can successfully learn nontrivial tasks requiring flexible (context-dependent) associations, memory maintenance, nonlinear mixed selectivities, and coordination among multiple outputs. The resulting networks replicate complex dynamics previously observed in animal cortex, such as dynamic encoding of task features and selective integration of sensory inputs. We conclude that recurrent neural networks offer a plausible model of cortical dynamics during both learning and performance of flexible behavior.",
+      "year": 2016,
+      "authors": [
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        }
+      ],
+      "venue": "bioRxiv",
+      "journal": null,
+      "url": "https://www.ncbi.nlm.nih.gov/pubmed/28230528",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.8850219465851229,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 261598527,
+      "title": "Evolving plastic networks that can learn novel cognitive tasks",
+      "abstract": null,
+      "year": 2023,
+      "authors": [
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        }
+      ],
+      "venue": "2023 Conference on Cognitive Computational Neuroscience",
+      "journal": null,
+      "url": "https://doi.org/10.32470/ccn.2023.1341-0",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.8785697058869233,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 7007748,
+      "title": "Biologically plausible learning in recurrent neural networks for flexible decision tasks",
+      "abstract": "Recurrent neural networks operating in the near-\u00adchaotic regime exhibit complex dynamics, reminiscent of neural activity in higher cortical areas. As a result, these networks have been proposed as models of cortical computation during cognitive tasks. However, existing methods for training the connectivity of these networks are either biologically implausible, and/or require an instantaneous, real-\u00adtime continuous error signal to guide the learning process. The lack of plausible learning method may restrict the applicability of recurrent neural networks as models of cortical computation. Here we introduce a biologically plausible learning rule that can train such recurrent networks, guided solely by delayed, phasic rewards at the end of each trial. We use this method to learn various tasks from the experimental literature, showing that this learning rule can successfully implement flexible associations, memory maintenance, nonlinear mixed selectivities, and coordination among multiple outputs. The trained networks exhibit complex dynamics previously observed in animal cortex, such as dynamic encoding and maintenance of task features, switching from stimulus-\u00adspecific to response-\u00adspecific representations, and selective integration of relevant input streams. We conclude that recurrent neural networks can offer a plausible model of cortical dynamics during both learning and performance of flexible behavior. Introduction Recent evidence suggests that neural representations are highly dynamic, encoding multiple aspects of tasks, stimuli, and commands in the joint fluctuating activity of interconnected populations of neurons, rather than in the stable activation of specific neurons \u200b (Meyers et al. this reason, such models have been used to investigate the mechanisms by which neural populations solve various computational problems, including working memory \u200b (Barak et al. 1. CC-BY-NC 4.0 International license peer-reviewed) is the author/funder. It is made available under a The copyright holder for this preprint (which was not .",
+      "year": null,
+      "authors": [
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        }
+      ],
+      "venue": null,
+      "journal": null,
+      "url": "http://biorxiv.org/content/biorxiv/early/2016/06/07/057729.full.pdf",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.860924332377499,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 63493821,
+      "title": "Flexible decision-making in recurrent neural networks trained with a biologically plausible rule",
+      "abstract": "Neural activity during cognitive tasks exhibits complex dynamics that flexibly encode task-relevant variables. Recurrent neural networks operating in the near-chaotic regime, which spontaneously generate rich dynamics, have been proposed as a model of cortical computation during cognitive tasks. However, existing methods for training these networks are either biologically implausible, and/or require a continuous, real-time error signal to guide the learning process. The lack of a biological learning method currently restricts the plausibility of recurrent networks as models of cortical computation. Here we show that a biologically plausible learning rule can train such recurrent networks, guided solely by delayed, phasic rewards at the end of each trial, for nontrivial tasks. We use this method to learn various tasks from the experimental literature, showing that this learning rule can successfully implement flexible associations, memory maintenance, nonlinear mixed selectivities, and coordination among multiple outputs. We show that the resulting networks exhibit complex dynamics previously observed in animal cortex, such as dynamic encoding and maintenance of task features, switching from stimulus-specific to response-specific representations, and selective integration of relevant input streams. We conclude that recurrent neural networks offer a plausible model of cortical dynamics during both learning and performance of flexible behavior.",
+      "year": 2016,
+      "authors": [
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        }
+      ],
+      "venue": null,
+      "journal": null,
+      "url": "https://pdfs.semanticscholar.org/173a/226c81e37f2751a0c42310ccec4986acb040.pdf",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.8590180653788955,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 12503679,
+      "title": "Training recurrent neural networks with sparse, delayed rewards for flexible decision tasks",
+      "abstract": "Recurrent neural networks in the chaotic regime exhibit complex dynamics reminiscent of high-level cortical activity during behavioral tasks. However, existing training methods for such networks are either biologically implausible, or require a real-time continuous error signal to guide the learning process. This is in contrast with most behavioral tasks, which only provide time-sparse, delayed rewards. Here we show that a biologically plausible reward-modulated Hebbian learning algorithm, previously used in feedforward models of birdsong learning, can train recurrent networks based solely on delayed, phasic reward signals at the end of each trial. The method requires no dedicated feedback or readout networks: the whole network connectivity is subject to learning, and the network output is read from one arbitrarily chosen network cell. We use this method to successfully train a network on a delayed nonmatch to sample task (which requires memory, flexible associations, and non-linear mixed selectivities). Using decoding techniques, we show that the resulting networks exhibit dynamic coding of task-relevant information, with neural encodings of various task features fluctuating widely over the course of a trial. Furthermore, network activity moves from a stimulus-specific representation to a response-specific representation during response time, in accordance with neural recordings in behaving animals for similar tasks. We conclude that recurrent neural networks, trained with reward-modulated Hebbian learning, offer a plausible model of cortical dynamics during learning and performance of flexible association.",
+      "year": 2015,
+      "authors": [
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        }
+      ],
+      "venue": null,
+      "journal": null,
+      "url": "https://arxiv.org/pdf/1507.08973.pdf",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.6869299480974583,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 258823273,
+      "title": "Brain-inspired learning in artificial neural networks: a review",
+      "abstract": "Artificial neural networks (ANNs) have emerged as an essential tool in machine learning, achieving remarkable success across diverse domains, including image and speech generation, game playing, and robotics. However, there exist fundamental differences between ANNs\u2019 operating mechanisms and those of the biological brain, particularly concerning learning processes. This paper presents a comprehensive review of current brain-inspired learning representations in artificial neural networks. We investigate the integration of more biologically plausible mechanisms, such as synaptic plasticity, to improve these networks\u2019 capabilities. Moreover, we delve into the potential advantages and challenges accompanying this approach. In this review, we pinpoint promising avenues for future research in this rapidly advancing field, which could bring us closer to understanding the essence of intelligence.",
+      "year": 2023,
+      "authors": [
+        {
+          "name": "Samuel Schmidgall",
+          "id": ""
+        },
+        {
+          "name": "Jascha Achterberg",
+          "id": ""
+        },
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        },
+        {
+          "name": "Louis Kirsch",
+          "id": ""
+        },
+        {
+          "name": "Rojin Ziaei",
+          "id": ""
+        },
+        {
+          "name": "S. P. Hajiseyedrazi",
+          "id": ""
+        },
+        {
+          "name": "Jason Eshraghian",
+          "id": ""
+        }
+      ],
+      "venue": "APL Machine Learning",
+      "journal": null,
+      "url": "https://arxiv.org/pdf/2305.11252.pdf",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.5002615374090803,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 4714955,
+      "title": "Differentiable plasticity: training plastic neural networks with backpropagation",
+      "abstract": "How can we build agents that keep learning from experience, quickly and efficiently, after their initial training? Here we take inspiration from the main mechanism of learning in biological brains: synaptic plasticity, carefully tuned by evolution to produce efficient lifelong learning. We show that plasticity, just like connection weights, can be optimized by gradient descent in large (millions of parameters) recurrent networks with Hebbian plastic connections. First, recurrent plastic networks with more than two million parameters can be trained to memorize and reconstruct sets of novel, high-dimensional 1000+ pixels natural images not seen during training. Crucially, traditional non-plastic recurrent networks fail to solve this task. Furthermore, trained plastic networks can also solve generic meta-learning tasks such as the Omniglot task, with competitive results and little parameter overhead. Finally, in reinforcement learning settings, plastic networks outperform a non-plastic equivalent in a maze exploration task. We conclude that differentiable plasticity may provide a powerful novel approach to the learning-to-learn problem.",
+      "year": 2018,
+      "authors": [
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        },
+        {
+          "name": "J. Clune",
+          "id": ""
+        },
+        {
+          "name": "Kenneth O. Stanley",
+          "id": ""
+        }
+      ],
+      "venue": "International Conference on Machine Learning",
+      "journal": null,
+      "url": "https://arxiv.org/pdf/1804.02464.pdf",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.37337660161788366,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 53474174,
+      "title": "Backpropamine: training self-modifying neural networks with differentiable neuromodulated plasticity",
+      "abstract": "The impressive lifelong learning in animal brains is primarily enabled by plastic changes in synaptic connectivity. Importantly, these changes are not passive, but are actively controlled by neuromodulation, which is itself under the control of the brain. The resulting self-modifying abilities of the brain play an important role in learning and adaptation, and are a major basis for biological reinforcement learning. Here we show for the first time that artificial neural networks with such neuromodulated plasticity can be trained with gradient descent. Extending previous work on differentiable Hebbian plasticity, we propose a differentiable formulation for the neuromodulation of plasticity. We show that neuromodulated plasticity improves the performance of neural networks on both reinforcement learning and supervised learning tasks. In one task, neuromodulated plastic LSTMs with millions of parameters outperform standard LSTMs on a benchmark language modeling task (controlling for the number of parameters). We conclude that differentiable neuromodulation of plasticity offers a powerful new framework for training neural networks.",
+      "year": 2018,
+      "authors": [
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        },
+        {
+          "name": "Aditya Rawal",
+          "id": ""
+        },
+        {
+          "name": "J. Clune",
+          "id": ""
+        },
+        {
+          "name": "Kenneth O. Stanley",
+          "id": ""
+        }
+      ],
+      "venue": "International Conference on Learning Representations",
+      "journal": null,
+      "url": "https://arxiv.org/pdf/2002.10585.pdf",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.37246871912818924,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 245218503,
+      "title": "Learning to acquire novel cognitive tasks with evolution, plasticity and meta-meta-learning",
+      "abstract": "A hallmark of intelligence is the ability to learn new flexible, cognitive behaviors - that is, behaviors that require memorizing and exploiting a certain information item for each new instance of the task. In meta-learning, agents are trained with an external, human-designed reinforcement learning algorithm to learn a specific cognitive task. However, animals are able to pick up such cognitive tasks automatically, from stimuli and rewards alone, as a result of their evolved neural architecture and synaptic plasticity mechanisms: evolution has designed animal brains as self-contained reinforcement (meta-)learning systems, capable not just of performing specific cognitive tasks, but of acquiring novel cognitive tasks, including tasks never seen during evolution. Can we harness this process to generate artificial agents with such abilities? Here we evolve neural networks, endowed with plastic connections and neuromodulation, over a sizable set of simple meta-learning tasks based on a framework from computational neuroscience. The resulting evolved networks can automatically acquire a novel simple cognitive task, never seen during evolution, through the spontaneous operation of their evolved neural organization and plasticity system. We suggest that attending to the multiplicity of loops involved in natural learning may provide useful insight into the emergence of intelligent behavior. An important feature of intelligent behavior is the ability to learn not just simple, reactive tasks (associating a stimulus with a response), but also more complex, cognitive tasks. By \"cognitive\", we mean a task which require the acquisition, storage, processing and appropriate exploitation of novel, unpredictable pieces of information from the environment for each new instance of the task. This ability to \"learn how to learn\", or meta-learning, has been studied quantitatively in animals [9] and implemented in artificial neural networks [3, 5, 10, 18, 22, 24].",
+      "year": 2021,
+      "authors": [
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        }
+      ],
+      "venue": "GECCO Companion",
+      "journal": null,
+      "url": "http://dl.acm.org/citation.cfm?id=3533981",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.36311000308247615,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 220265745,
+      "title": "Enabling Continual Learning with Differentiable Hebbian Plasticity",
+      "abstract": "Continual learning is the problem of sequentially learning new tasks or knowledge while protecting previously acquired knowledge. However, catastrophic forgetting poses a grand challenge for neural networks performing such learning process. Thus, neural networks that are deployed in the real world often struggle in scenarios where the data distribution is non-stationary (concept drift), imbalanced, or not always fully available, i.e., rare edge cases. We propose a Differentiable Hebbian Consolidation model which is composed of a Differentiable Hebbian Plasticity (DHP) Softmax layer that adds a rapid learning plastic component (compressed episodic memory) to the fixed (slow changing) parameters of the softmax output layer; enabling learned representations to be retained for a longer timescale. We demonstrate the flexibility of our method by integrating well-known task-specific synaptic consolidation methods to penalize changes in the slow weights that are important for each target task. We evaluate our approach on the Permuted MNIST, Split MNIST and Vision Datasets Mixture benchmarks, and introduce an imbalanced variant of Permuted MNIST \u2014 a dataset that combines the challenges of class imbalance and concept drift. Our proposed model requires no additional hyperparameters and outperforms comparable baselines by reducing forgetting.",
+      "year": 2020,
+      "authors": [
+        {
+          "name": "Vithursan Thangarasa",
+          "id": ""
+        },
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        },
+        {
+          "name": "Graham W. Taylor",
+          "id": ""
+        }
+      ],
+      "venue": "IEEE International Joint Conference on Neural Network",
+      "journal": null,
+      "url": "http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9206764",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.3616530198115311,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 198187529,
+      "title": "Differentiable Hebbian Plasticity for Continual Learning",
+      "abstract": "Catastrophic forgetting poses a grand challenge for continual learning systems, which prevents neural networks from protecting old knowledge while learning new tasks sequentially. We propose a Differentiable Hebbian Plasticity (DHP) Softmax layer which adds a fast learning plastic component to the slow weights of the softmax output layer. The DHP Softmax behaves as a compressed episodic memory that reactivates existing memory traces, while creating new ones. We demonstrate the flexibility of our model by combining it with existing well-known consolidation methods to prevent catastrophic forgetting. We evaluate our approach on the Permuted MNIST and Split MNIST benchmarks, and introduce Imbalanced Permuted MNIST \u2014 a dataset that combines the challenges of class imbalance and concept drift. Our model requires no additional hyperparameters and outperforms comparable baselines by reducing forgetting.",
+      "year": 2019,
+      "authors": [
+        {
+          "name": "Vithursan Thangarasa",
+          "id": ""
+        },
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        },
+        {
+          "name": "Graham W. Taylor",
+          "id": ""
+        }
+      ],
+      "venue": null,
+      "journal": null,
+      "url": "https://openreview.net/pdf?id=r1x-E5Ss34",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.3549877113537366,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 213630195,
+      "title": "Differentiable Hebbian Consolidation for Continual Learning",
+      "abstract": null,
+      "year": 2019,
+      "authors": [
+        {
+          "name": "Vithursan Thangarasa",
+          "id": ""
+        },
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        },
+        {
+          "name": "Graham W. Taylor",
+          "id": ""
+        }
+      ],
+      "venue": null,
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:213630195",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.3545176196597375,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 7689329,
+      "title": "Backpropagation of Hebbian plasticity for lifelong learning",
+      "abstract": "Hebbian plasticity allows biological agents to learn from their lifetime experience, extending the fixed information provided by evolutionary search. Conversely, backpropagation methods can build high-performance fixed-weights networks, but are not currently equipped to design networks with Hebbian connections. Here we use backpropagation to train fully-differentiable plastic networks, such that backpropagation determines not only the baseline weights, but also the plasticity of each connection. To perform this backpropagation of Hebbian plasticity (BOHP), we derive error gradients for neural networks with Hebbian plastic connections. The equations for these gradients turn out to follow a simple, recursive form. We apply this method to train small networks for simple learning tasks inspired from classical conditioning. We show that, through Hebbian plasticity, the networks perform fast learning of unpredictable environmental features during their lifetime, successfully solving a task that fixed-weight feedforward networks cannot possibly solve. We conclude that backpropagation of Hebbian plasticity offers a powerful model for lifelong learning.",
+      "year": 2016,
+      "authors": [
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "http://arxiv.org/pdf/1609.02228v1.pdf",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.3448817674869435,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 240354820,
+      "title": "Hebbian learning with gradients: Hebbian convolutional neural networks with modern deep learning frameworks",
+      "abstract": "Deep learning networks generally use non-biological learning methods. By contrast, networks based on more biologically plausible learning, such as Hebbian learning, show comparatively poor performance and difficulties of implementation. Here we show that Hebbian learning in hierarchical, convolutional neural networks can be implemented almost trivially with modern deep learning frameworks, by using specific losses whose gradients produce exactly the desired Hebbian updates. We provide expressions whose gradients exactly implement a plain Hebbian rule (dw ~= xy), Grossberg's instar rule (dw ~= y(x-w)), and Oja's rule (dw ~= y(x-yw)). As an application, we build Hebbian convolutional multi-layer networks for object recognition. We observe that higher layers of such networks tend to learn large, simple features (Gabor-like filters and blobs), explaining the previously reported decrease in decoding performance over successive layers. To combat this tendency, we introduce interventions (denser activations with sparse plasticity, pruning of connections between layers) which result in sparser learned features, massively increase performance, and allow information to increase over successive layers. We hypothesize that more advanced techniques (dynamic stimuli, trace learning, feedback connections, etc.), together with the massive computational boost offered by modern deep learning frameworks, could greatly improve the performance and biological relevance of multi-layer Hebbian networks.",
+      "year": 2021,
+      "authors": [
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        }
+      ],
+      "venue": null,
+      "journal": null,
+      "url": "https://arxiv.org/pdf/2107.01729.pdf",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.28053493065414625,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 256827199,
+      "title": "Procedural generation of meta-reinforcement learning tasks",
+      "abstract": "Open-endedness stands to benefit from the ability to generate an infinite variety of diverse, challenging environments. One particularly interesting type of challenge is meta-learning (\"learning-to-learn\"), a hallmark of intelligent behavior. However, the number of meta-learning environments in the literature is limited. Here we describe a parametrized space for simple meta-reinforcement learning (meta-RL) tasks with arbitrary stimuli. The parametrization allows us to randomly generate an arbitrary number of novel simple meta-learning tasks. The parametrization is expressive enough to include many well-known meta-RL tasks, such as bandit problems, the Harlow task, T-mazes, the Daw two-step task and others. Simple extensions allow it to capture tasks based on two-dimensional topological spaces, such as full mazes or find-the-spot domains. We describe a number of randomly generated meta-RL domains of varying complexity and discuss potential issues arising from random generation.",
+      "year": 2023,
+      "authors": [
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        }
+      ],
+      "venue": null,
+      "journal": null,
+      "url": "https://arxiv.org/pdf/2302.05583.pdf",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.2803202455957713,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 235732192,
+      "title": "Multi-layer Hebbian networks with modern deep learning frameworks",
+      "abstract": "Deep learning networks generally use non-biological learning methods. By contrast, networks based on more biologically plausible learning, such as Hebbian learning, show comparatively poor performance and dif\ufb01culties of implementation. Here we show that hierarchical, convolutional Hebbian learning can be implemented almost trivially with modern deep learning frameworks, by using speci\ufb01c losses whose gradients produce exactly the desired Hebbian updates. We provide expressions whose gradients exactly implement a plain Hebbian rule ( \u2206 w \u221d xy ), Grossberg\u2019s instar rule ( \u2206 w \u221d y ( x \u2212 w ) ), and Oja\u2019s rule ( \u2206 w \u221d y ( x \u2212 yw ) ). As an application, we build Hebbian convolutional multi-layer networks for object recognition. We observe that higher layers of such networks tend to learn large, simple features (Gabor-like \ufb01lters and blobs), explaining the previously reported decrease in decoding performance over successive layers. To combat this tendency, we introduce interventions (denser activations with sparse plasticity, pruning of connections between layers) which result in sparser learned features, massively increase performance, and allow information to increase over successive layers. We hypothesize that more advanced techniques (dynamic stimuli, trace learning, feedback connections, etc.), together with the massive computational boost offered by modern deep learning frameworks, could greatly improve the performance and biological relevance of multi-layer Hebbian networks.",
+      "year": 2021,
+      "authors": [
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://export.arxiv.org/pdf/2107.01729",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.27763146011728235,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 14269411,
+      "title": "Neural networks with differentiable structure",
+      "abstract": "While gradient descent has proven highly successful in learning connection weights for neural networks, the actual structure of these networks is usually determined by hand, or by other optimization algorithms. Here we describe a simple method to make network structure differentiable, and therefore accessible to gradient descent. We test this method on recurrent neural networks applied to simple sequence prediction problems. Starting with initial networks containing only one node, the method automatically builds networks that successfully solve the tasks. The number of nodes in the final network correlates with task difficulty. The method can dynamically increase network size in response to an abrupt complexification in the task; however, reduction in network size in response to task simplification is not evident for reasonable meta-parameters. The method does not penalize network performance for these test tasks: variable-size networks actually reach better performance than fixed-size networks of higher, lower or identical size. We conclude by discussing how this method could be applied to more complex networks, such as feedforward layered networks, or multiple-area networks of arbitrary shape.",
+      "year": 2016,
+      "authors": [
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        }
+      ],
+      "venue": "arXiv.org",
+      "journal": null,
+      "url": "https://arxiv.org/pdf/1606.06216.pdf",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.2617876037251811,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 13901695,
+      "title": "Learning to learn with backpropagation of Hebbian plasticity",
+      "abstract": "Hebbian plasticity is a powerful principle that allows biological brains to learn from their lifetime experience. By contrast, artificial neural networks trained with backpropagation generally have fixed connection weights that do not change once training is complete. While recent methods can endow neural networks with long-term memories, Hebbian plasticity is currently not amenable to gradient descent. Here we derive analytical expressions for activity gradients in neural networks with Hebbian plastic connections. Using these expressions, we can use backpropagation to train not just the baseline weights of the connections, but also their plasticity. As a result, the networks \"learn how to learn\" in order to solve the problem at hand: the trained networks automatically perform fast learning of unpredictable environmental features during their lifetime, expanding the range of solvable problems. We test the algorithm on various on-line learning tasks, including pattern completion, one-shot learning, and reversal learning. The algorithm successfully learns how to learn the relevant associations from one-shot instruction, and fine-tunes the temporal dynamics of plasticity to allow for continual learning in response to changing environmental parameters. We conclude that backpropagation of Hebbian plasticity offers a powerful model for lifelong learning.",
+      "year": 2016,
+      "authors": [
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        }
+      ],
+      "venue": null,
+      "journal": null,
+      "url": "https://arxiv.org/pdf/1609.02228.pdf",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.2609598418034771,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 141926479,
+      "title": "Uno squilibrio non prevedibile. Concentrazione e potere nel web 2.0",
+      "abstract": null,
+      "year": 2012,
+      "authors": [
+        {
+          "name": "A. Miconi",
+          "id": ""
+        }
+      ],
+      "venue": null,
+      "journal": null,
+      "url": "https://api.semanticscholar.org/CorpusId:141926479",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.2566866460428383,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 144277499,
+      "title": "A simple feedback-based model explains the diverse effects of attention on visual responses",
+      "abstract": null,
+      "year": 2011,
+      "authors": [
+        {
+          "name": "Thomas Miconi",
+          "id": ""
+        },
+        {
+          "name": "R. VanRullen",
+          "id": ""
+        }
+      ],
+      "venue": null,
+      "journal": null,
+      "url": "https://doi.org/10.1167/11.11.227",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.2565923799491046,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 193999460,
+      "title": "I media, la storia (le sue tendenze), il potere. Un discorso teorico a partire da Manuel Castells",
+      "abstract": null,
+      "year": 2009,
+      "authors": [
+        {
+          "name": "A. Miconi",
+          "id": ""
+        }
+      ],
+      "venue": null,
+      "journal": null,
+      "url": "https://doi.org/10.1445/31007",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.25652304809959325,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    },
+    {
+      "corpusId": 170867001,
+      "title": "Prima o dopo? Premesse ed effetti. Cause e contesti. Ripensare la teoria su opinione pubblica, giornalismo e societ\u00e0",
+      "abstract": null,
+      "year": 2008,
+      "authors": [
+        {
+          "name": "A. Miconi",
+          "id": ""
+        }
+      ],
+      "venue": null,
+      "journal": null,
+      "url": "https://doi.org/10.1445/27244",
+      "publicationDate": null,
+      "citationCount": null,
+      "categories": [],
+      "relevanceScore": 0.25651149804695206,
+      "relevanceJudgement": null,
+      "snippets": [],
+      "citationContexts": [],
+      "legalToShow": true,
+      "numOfOmittedCitationContextsDueLegal": 0
+    }
+  ]
+}

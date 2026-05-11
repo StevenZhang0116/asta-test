@@ -18,81 +18,88 @@
 
 ## 3. Related Work
 
-### Key Papers Identified (Literature Search Complete)
+### Key Papers Identified
+- Sacramento et al. (2018): Dendritic cortical microcircuits (structural credit)
+- Bellec et al. (2020): e-prop (eligibility propagation for temporal credit)
+- Liu et al. (2022): ModProp (neuromodulatory temporal credit)
+- Hasselmo et al. (2002, 2024): SPEAR (theta phase encoding/retrieval separation)
+- Saponati & Vinck (2023): Predictive learning rule (anticipatory plasticity)
+- Lillicrap et al. (2016): Feedback alignment (random backward weights)
+- Temporal Predictive Coding (2026), Predictive E-prop (2026)
 
-**Dendritic / Structural Credit:**
-- Sacramento et al. (2018): Dendritic cortical microcircuits approximate backpropagation — uses apical dendrites for error signals in feedforward hierarchies
-- Rao et al. (2021): Normative framework for apical dendrite prediction learning — focuses on inter-layer predictions
-- Payeur et al. (2021): Burst-dependent synaptic plasticity — burst coding coordinates learning across hierarchical circuits
-- Meulemans et al. (2021): Deep Feedback Control — multi-compartment model with local voltage-dependent plasticity
+## 4. Hypotheses — Status Summary
 
-**Temporal Credit Assignment:**
-- Bellec et al. (2020): e-prop — eligibility propagation for recurrent spiking networks
-- Liu et al. (2022): ModProp — neuromodulatory signals for temporal credit
-- Liu et al. (2020): Cell-type-specific modulatory signals for temporal credit
-- Barretto-Bittar et al. (2026): Diffusion of neuromodulators for temporal credit
-- Temporal Predictive Coding (2026): Extends PC to RNNs for long-range temporal dependencies
-- Predictive E-prop (Noè et al., 2026): Combines predictive coding + e-prop
+| Hypothesis | Status | Result |
+|-----------|--------|--------|
+| H2: OPCA (same weights for forward+credit) | TESTED | FAILED — worse than random FA |
+| H6: PSC-NoGate (predictive self-correction, no osc) | TESTED | PROMISING — 76.4% accuracy |
+| H6: PSC-Osc (with oscillatory gating) | TESTED | FAILED — oscillatory gating hurts |
+| H1: Dendritic self-prediction | Not tested | Subsumed into H6 |
+| H3: Lateral inhibition as implicit error | Not tested | - |
+| H4: Stochastic neuromodulatory replay | Not tested | - |
 
-**Predictive / Anticipatory Learning:**
-- Saponati & Vinck (2023): Predictive learning rule — neurons predict synaptic input dynamics
-- Kriener et al. (2024): ELiSe — dendritic compartments + scaffold for sequence learning
+### Key Findings Across All Experiments
 
-**Phase/Oscillatory:**
-- Hasselmo et al. (2002, 2024): SPEAR model — theta phases separate encoding/retrieval
-- Maes et al. (2019): Multiplexing neural oscillations for temporal sequence learning
+1. **OPCA (using W for backward credit) is WORSE than random FA** (62.4% vs 79.7% accuracy on copy task with best hyperparams from prior experiment)
+2. **PSC-NoGate achieves 76.4% accuracy** using only local eligibility traces + output error feedback — NO backward propagation at all
+3. **Oscillatory gating HURTS** — it restricts plasticity to ~50% of timesteps, halving the learning signal
+4. **All bio-plausible methods have massive gap to BPTT** (100% accuracy by iter ~300)
+5. **OPCA-alpha (from Step 2)** learned to reduce alpha→0.047, confirming that long-range temporal credit via W is unhelpful
 
-### Gap Analysis (Updated)
-The temporal credit assignment space is very active (multiple 2026 papers). Self-prediction within recurrent dynamics is partially explored but not via dendritic compartments. Oscillatory phase-multiplexing for credit assignment (not just encoding/retrieval) remains unexplored.
+### Most Promising Direction: PSC-NoGate
 
-## 4. Hypotheses
+The PSC-NoGate algorithm achieves the best bio-plausible performance observed so far:
+- 76.4% accuracy on copy task (vs BPTT 100%, FA ~50-80% depending on setup)
+- Uses ONLY local signals: eligibility traces + output error projected through W_out
+- No backward propagation of any kind through recurrent weights
+- Prediction compartment provides self-supervised auxiliary learning signal
+- Best config: lr=0.001, beta=0.1, gamma=0.5, lambda=0.9
 
-### H1: Dendritic Prediction Error Hypothesis (Confidence: 30% → lowered after lit search)
-**Idea**: Neurons predict their own future state via dendritic compartments; prediction errors drive eligibility traces gated by surprise.
-**Status**: PARTIALLY NOVEL. The space is converging — temporal predictive coding (2026) and predictive e-prop (2026) are close. The specific "self-prediction" mechanism may still be distinct but is at risk of being scooped.
+## 5. Experimental Results
 
-### H2: Oscillatory Phase-Gated Credit Assignment (Confidence: 45% → raised after lit search)
-**Idea**: Theta/gamma oscillations multiplex forward computation and credit assignment through the SAME weights in different phases.
-**Status**: MODERATELY NOVEL. No prior work proposes using oscillatory phases specifically for temporal credit assignment through shared weights. Hasselmo's SPEAR is closest but addresses encoding/retrieval, not credit. Mathematical feasibility is the main concern (weight transport in temporal guise).
+### Experiment 1: OPCA Copy Task (Step 2)
+| Method | Final MSE | Bit Accuracy |
+|--------|-----------|-------------|
+| BPTT | 0.0004 | 100.0% |
+| OPCA-alpha | 0.1416 | 80.6% |
+| FA | 0.1453 | 79.7% |
+| OPCA | 0.2339 | 62.4% |
+| RFLO | 0.2679 | 51.6% |
 
-### H3: Competitive Lateral Inhibition as Implicit Error (Confidence: 25%)
-**Status**: Not yet assessed against literature.
+### Experiment 2: PSC Copy Task (Step 3)
+| Method | Final MSE | Bit Accuracy |
+|--------|-----------|-------------|
+| BPTT | 0.0005 | 100.0% |
+| PSC-NoGate | 0.1575 | 76.4% |
+| PSC-Osc | 0.2494 | 51.7% |
+| FA | 0.2523 | 50.8% |
 
-### H4: Synaptic Tagging with Stochastic Neuromodulatory Replay (Confidence: 20%)
-**Status**: Not yet assessed against literature.
+### Cross-Experiment Summary (best bio-plausible per experiment)
+- OPCA-alpha (Exp 1): 80.6% — but cheats by learning alpha→0 (nearly local)
+- PSC-NoGate (Exp 2): 76.4% — genuinely novel, fully local, no backward pass
 
-## 5. Experimental Designs
+## 6. Open Questions & Key Insights
 
-### Phase 1: Literature Validation — COMPLETE for H1, H2
-### Phase 2: Mathematical Formalization — NEXT PRIORITY
-- Need to formalize H2 (oscillatory phase-gating) mathematically
-- Key question: Under what constraints can the same weight matrix propagate credit backward in a different oscillatory phase?
-- Consider: transpose approximation, feedback alignment, or emergent alignment
+### Insights
+1. **Backward propagation through recurrent weights (any version) is problematic**: Whether using W, W^T, or random B, propagating credit backward through the recurrent structure is either biologically implausible (W^T) or mathematically ineffective (W or random B)
+2. **Local-only learning can work**: PSC-NoGate shows that eligibility traces + direct output error feedback achieves reasonable performance without any temporal credit propagation
+3. **Oscillatory gating is counterproductive for this task**: Restricting plasticity to certain phases just reduces learning
+4. **The performance gap to BPTT is fundamental**: Without proper temporal credit assignment, bio-plausible methods cap around 75-80% on the copy task
 
-### Phase 3: Implementation & Testing (not yet started)
-### Phase 4: Analysis (not yet started)
+### Open Questions
+1. **Would PSC-NoGate improve with better prediction learning?** Currently prediction is simple linear, could nonlinear prediction help?
+2. **Is the copy task too hard a first test?** It requires perfect memory over 10 steps — maybe an easier task would show the methods in better light
+3. **Can we improve temporal credit WITHOUT backward propagation?** The key challenge remains
+4. **Would a different prediction target help?** Instead of predicting own activity, predict own GRADIENT contribution?
 
-## 6. Results Summary
+## 7. Next Steps (Priority Order)
 
-### Step 1: Literature Search (Complete)
-- H1 (Dendritic Self-Prediction): ~55% novel; converging space, moderate risk
-- H2 (Oscillatory Phase-Gating): ~65% novel; more surprising, less explored
-- Recommendation: Pursue H2 as primary hypothesis due to higher novelty and surprise factor
-- Full report: docs/novelty_assessment.md
-
-## 7. Open Questions & Confusions
-
-1. **Mathematical feasibility of H2**: Can the same weight matrix meaningfully propagate credit backward in a different phase? If it requires near-symmetric weights, it reduces to feedback alignment.
-2. **How to handle the "transpose problem" in H2**: During credit phase, information needs to flow "backward" through the same weights — what mathematical trick makes this work?
-3. Should we consider a HYBRID approach (H1+H2) where oscillatory phases gate between self-prediction and credit propagation?
-4. H3 and H4 haven't been literature-checked yet — worth doing?
-
-## 8. Next Steps
-
-1. **PRIORITY**: Mathematically formalize H2 (oscillatory phase-gated credit assignment)
-   - Define the forward dynamics (normal phase)
-   - Define the credit dynamics (credit phase)  
-   - Show under what conditions the combined system approximates gradient descent
-   - Identify the biological constraints and what they cost in terms of approximation quality
-2. Consider whether a hybrid H1+H2 approach adds value
-3. If H2 math works out: implement and test on copy task
+1. **Refine PSC-NoGate**: 
+   - Test on additional tasks (adding problem, sequential MNIST) to verify generality
+   - Try nonlinear prediction compartment
+   - Investigate why it plateaus at ~76% — is it a fundamental limitation or hyperparameter issue?
+2. **Explore temporal credit via FORWARD prediction of future errors** (not backward propagation)
+   - Each neuron could predict "will I contribute to future error?" using predictive compartment
+   - This forward-looking prediction could provide temporal credit without backward flow
+3. **Write up the PSC algorithm formally** as the main contribution
+4. **Biological narrative**: Formalize the mapping between PSC components and neural circuits

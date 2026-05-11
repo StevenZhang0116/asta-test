@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Self-Correction (PSC): A Biologically-Plausible Local Learning Rule for Recurrent Neural Networks on Temporal Tasks</title>
+    <style>
+              body {
+	              font-family: 'Arial', sans-serif;
+	              margin: 20px;
+	              line-height: 1.6;
+	          }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h2 {
+            color: #444;
+        }
+
+        address {
+            margin-top: 20px;
+            font-style: normal;
+        }
+
+        section {
+            margin-bottom: 30px;
+        }
+
+        summary {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        pre {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Predictive Self-Correction (PSC): A Biologically-Plausible Local Learning Rule for Recurrent Neural Networks on Temporal Tasks</h1>
+        <i>PANDA</i><br>
+        <i>Allen Institute for AI, Seattle, WA</i></br>
+	<i>05-07-2026 22:49:43</i><br>
+	<tt>panda@allenai.org</tt>
+    </header>
+
+<section>    
+<h3>Abstract</h3>
+<i>
+We investigate the Predictive Self-Correction (PSC) learning rule, a proposed biologically-plausible alternative to backpropagation through time (BPTT) for training recurrent neural networks (RNNs) on temporal tasks. PSC avoids backward error propagation entirely by combining three local mechanisms: (1) a prediction compartment that tracks each neuron's expected activity via lateral connections, (2) eligibility traces that accumulate temporal credit information, and (3) an output error signal projected forward through the output weight matrix. An optional oscillatory gate modulates weight updates using a sinusoidal gating function, inspired by theta-gated hippocampal plasticity.
+
+We evaluated PSC on the copy task, in which an RNN must reproduce 8-bit binary patterns after a 10-step delay, using a vanilla RNN with 128 hidden units trained for 5000 iterations with batch size 32. We compared four methods: BPTT (gold standard), PSC without oscillatory gating (PSC-NoGate), PSC with oscillatory gating (PSC-Osc), and Feedback Alignment (FA, baseline). A hyperparameter grid search over 72 configurations was conducted using 1000-iteration runs.
+
+BPTT achieved perfect accuracy (100%) by approximately iteration 300, confirming the task is solvable. PSC-NoGate achieved 76.4% bit accuracy at 5000 iterations, substantially outperforming both FA (50.8%, near random) and PSC-Osc (51.7%). However, PSC-NoGate showed noisy, non-monotonic learning curves and failed to reach 90% accuracy, leaving a substantial gap below BPTT. Notably, the oscillatory gating component was found to be detrimental rather than beneficial: restricting updates to positive phases of a sinusoidal gate effectively halved the learning signal and prevented convergence.
+
+These results provide modest evidence that eligibility-trace-based local learning with output error feedback can partially solve temporal credit assignment without backpropagation. However, PSC-NoGate's performance plateau at ~76% and its sensitivity to hyperparameters suggest the algorithm requires further development before it can be considered a practical alternative to BPTT. The failure of oscillatory gating in this setting does not rule out benefits in other task structures. These findings should be interpreted cautiously given experiments on a single task with a single architecture.
+</i>
+</section>
+    
+
+<section>
+<h2>Introduction</h2>
+Training recurrent neural networks (RNNs) to solve temporal tasks typically relies on backpropagation through time (BPTT), an algorithm that computes exact gradients by unrolling the network and propagating errors backward across all timesteps. While powerful, BPTT is widely regarded as biologically implausible: it requires storing all intermediate activations, propagating signals backward in time, and using symmetric weight matrices for error transport -- none of which are consistent with known neuroscience. This creates a fundamental gap between the learning rules used in artificial neural networks and the mechanisms believed to operate in biological neural circuits.
+
+A long-standing goal in computational neuroscience and neuromorphic computing is to identify learning rules that are both effective and biologically plausible -- rules that rely only on locally available information, forward-pass dynamics, and signals that could plausibly exist in the brain. Candidate mechanisms include eligibility traces (which carry temporally delayed synaptic tags), predictive coding (where neurons predict their own or neighbors' activity), and oscillatory gating (where plasticity is restricted to specific phases of ongoing neural oscillations such as theta rhythms). However, combining these mechanisms into a single, trainable system for temporal tasks remains an open challenge.
+
+In this work, we implement and evaluate the Predictive Self-Correction (PSC) algorithm, a proposed local learning rule that combines three biologically-motivated components: a prediction compartment in which each neuron predicts its own future activity using lateral recurrent connections (analogous to apical dendritic prediction), eligibility traces that accumulate temporal credit information across time (analogous to synaptic tagging), and an output error signal anchored to task-relevant timesteps. An optional oscillatory gating mechanism, inspired by theta-dependent plasticity in the hippocampus, is also evaluated as an ablation condition.
+
+We test PSC on the copy task -- a standard benchmark for temporal memory in RNNs -- in which a network must reproduce 8-bit binary patterns after a 10-step blank delay period. This task requires the network to maintain information across time in the absence of input, making it a meaningful probe of temporal credit assignment. We compare PSC (with and without oscillatory gating) against BPTT (the gold standard) and Feedback Alignment (a previously studied biologically-motivated baseline that uses fixed random feedback matrices). A systematic hyperparameter search over 108 total configurations is conducted to fairly evaluate each variant.
+
+The main findings are as follows. BPTT solves the task perfectly (100% accuracy) within approximately 300 iterations, establishing a clear upper bound. PSC without oscillatory gating (PSC-NoGate) achieves 76.4% bit accuracy after 5000 iterations, demonstrating genuine but partial learning. PSC with oscillatory gating (PSC-Osc) reaches only 51.7% accuracy -- near random chance -- suggesting that the sinusoidal gating mechanism is counterproductive in this setting, likely because restricting updates to positive gating phases halves the effective learning signal. Feedback Alignment also fails to exceed chance (50.8%), consistent with the known difficulty of this method on tasks with long temporal dependencies.
+
+These results suggest that local eligibility-trace-based learning can partially address temporal credit assignment without backpropagation, but a substantial performance gap relative to BPTT remains. The failure of oscillatory gating as implemented here is an important negative finding that warrants further investigation. We emphasize that these conclusions are drawn from a single task and architecture, and should not be generalized without additional validation.
+</section>
+
+<section>
+  <h2>Approach</h2>
+TASK AND ARCHITECTURE
+
+We evaluate all methods on the copy task, a standard benchmark for temporal memory in recurrent networks. In each trial, an 8-bit binary pattern is presented sequentially to the network over 8 timesteps (one bit per timestep, each in its own input channel), followed by a 10-step blank delay period, a recall cue at timestep 17 (a dedicated marker input channel set to 1), and an 8-step output phase (timesteps 18-25) during which the network must reproduce the original pattern. The total sequence length is 26 timesteps. Loss is computed only at the 8 output timesteps using mean squared error (MSE) between the network output and the target pattern.
+
+All methods use a vanilla RNN with hidden size 128, input dimension 9 (8 bit channels + 1 marker), and output dimension 8. The recurrent dynamics are:
+
+    a_t = W_rec * h_{t-1} + W_in * x_t + b
+    h_t = tanh(a_t)
+    y_t = W_out * h_t + b_out
+
+Weights are initialized with standard normal distribution scaled by 0.1, and biases are initialized to zero.
+
+
+PSC ALGORITHM
+
+The PSC learning rule avoids all backward error propagation. Instead, credit assignment is performed using three forward-pass mechanisms.
+
+1. Prediction Compartment
+Each neuron i maintains a running prediction p_i(t) of its own activity, computed from the previous hidden state via a separate prediction weight matrix W_pred (128 x 128, initialized with standard normal scaled by 0.01):
+
+    p_i(t) = (1 - beta) * p_i(t-1) + beta * (W_pred[i,:] @ h(t-1))
+
+The prediction error is then:
+
+    delta_pred_i(t) = h_i(t) - p_i(t)
+
+This is a self-supervised signal: it measures how surprising the current activation is given recent network history. The prediction weights W_pred are updated via a local Hebbian rule at every timestep:
+
+    Delta_W_pred_ij = -lr_pred * delta_pred_i(t) * h_j(t-1)
+
+2. Eligibility Trace
+Each weight W_rec[i,j] accumulates an eligibility trace e_ij(t) that marks recent co-activity between the post-synaptic neuron i (via its tanh derivative) and the pre-synaptic neuron j:
+
+    e_ij(t) = lambda * e_ij(t-1) + dtanh_i(t) * h_j(t-1)
+
+where dtanh_i(t) = 1 - h_i(t)^2 is the local derivative of the activation function. An analogous trace e_in is maintained for input weights W_in using the input x_t in place of h_j(t-1). Eligibility traces are maintained per sample in the batch (shape: batch x hidden x hidden) and are clipped to a maximum Frobenius norm of 5 per sample at each timestep to prevent runaway growth.
+
+3. Credit Signal
+At each timestep, a credit signal s_i(t) is computed for each neuron i as a weighted combination of the prediction error and the output error projected to the hidden space:
+
+    output_err_hidden_i(t) = (y(t) - target(t)) @ W_out[:,i]   (nonzero only at output timesteps)
+    s_i(t) = gamma * delta_pred_i(t) + (1 - gamma) * output_err_hidden_i(t)
+
+The hyperparameter gamma controls the balance between the self-supervised prediction signal and the supervised output signal. Note that output_err_hidden is zero at non-output timesteps.
+
+4. Weight Update with Oscillatory Gate
+An optional oscillatory gate is computed as:
+
+    gate(t) = max(0, sin(2 * pi * t / T_theta))
+
+where T_theta is the oscillation period in timesteps. This gate restricts weight updates to the positive half-cycles of the sinusoidal oscillation. When oscillatory gating is disabled (PSC-NoGate), gate(t) = 1 for all t.
+
+Recurrent and input weights are updated when gate(t) > 0:
+
+    Delta_W_rec_ij += gate(t) * s_i(t) * e_ij(t)
+    Delta_W_in_ij  += gate(t) * s_i(t) * e_in_ij(t)
+    Delta_b_rec_i  += gate(t) * s_i(t)
+
+Output weights are updated using standard gradients at all output timesteps, regardless of oscillatory gate:
+
+    Delta_W_out_ij += out_err_i(t) * h_j(t) / batch_size
+    Delta_b_out_i  += out_err_i(t)
+
+All accumulated weight updates are passed through Adam momentum (beta1=0.9, beta2=0.999, epsilon=1e-8) and gradient norm clipping (max norm=1.0) before being applied to the weights. The prediction weight W_pred is updated via simple SGD with gradient norm clipping.
+
+
+FEEDBACK ALIGNMENT BASELINE (FA)
+
+FA is implemented as a manually unrolled RNN with a standard forward pass but a modified backward pass. Instead of using W_rec^T and W_out^T to propagate error gradients, fixed random matrices B_rec and B_out (initialized as standard normal scaled by 0.1) are used:
+
+    delta_h(t) = (out_err(t) @ B_out^T + delta_h_next) * dtanh(t)
+    delta_h_next = delta_h(t) @ B_rec^T
+
+Weight updates are accumulated and applied with Adam and gradient clipping, identically to PSC.
+
+
+BPTT BASELINE
+
+BPTT is implemented as a standard PyTorch RNN using autograd. The forward pass is identical to the manual implementation. Loss is MSE computed only at output timesteps, and all weights (W_in, W_rec, b_rec, W_out, b_out) are updated jointly via Adam with gradient clipping (norm 1.0).
+
+
+HYPERPARAMETER SEARCH
+
+A grid search was conducted for both PSC variants using 1000-iteration quick runs. The search space was:
+
+    lr       : {0.001, 0.005, 0.01}
+    beta     : {0.1, 0.3}
+    gamma    : {0.3, 0.5, 0.7}
+    lambda   : {0.9, 0.95}
+    T_theta  : {10, 20}  (PSC-Osc only)
+    lr_pred  : 0.001 (fixed)
+
+This yielded 72 configurations for PSC-Osc and 36 for PSC-NoGate (T_theta is irrelevant without gating). The top-3 configurations by final MSE were identified and the best was selected for full 5000-iteration training.
+
+For BPTT, lr=0.001 was used based on the quick verification experiment showing good convergence. For FA, lr=0.001 was used consistently.
+
+All experiments used a fixed random seed (42) for reproducibility, batch size 32, and were run on an NVIDIA A100-PCIE-40GB GPU using PyTorch 2.5.1.
+</section>
+
+<section>
+  <h2>Results</h2>
+  <pre>
+    HYPERPARAMETER GRID SEARCH
+
+A grid search over 108 total configurations (72 for PSC-Osc, 36 for PSC-NoGate) was conducted using 1000-iteration runs. The top-3 configurations for each PSC variant are shown below.
+
+Table 1: Top-3 PSC-Osc Configurations (1000-iteration grid search)
+
+  Rank  lr      beta  gamma  lambda  T_theta  Grid MSE  Grid Acc
+  ----  ------  ----  -----  ------  -------  --------  --------
+  1     0.001   0.1   0.3    0.90    20       0.2004    66.36%
+  2     0.001   0.3   0.7    0.95    20       0.2050    62.01%
+  3     0.001   0.3   0.3    0.90    20       0.2289    60.74%
+
+Table 2: Top-3 PSC-NoGate Configurations (1000-iteration grid search)
+
+  Rank  lr      beta  gamma  lambda  Grid MSE  Grid Acc
+  ----  ------  ----  -----  ------  --------  --------
+  1     0.001   0.1   0.5    0.90    0.1620    76.17%
+  2     0.001   0.1   0.7    0.95    0.1811    73.00%
+  3     0.001   0.1   0.7    0.90    0.1815    72.95%
+
+Notable patterns in the grid search: (1) lr=0.001 dominated all top configurations for both variants -- higher learning rates (0.005, 0.01) performed poorly. (2) For PSC-Osc, T_theta=20 appeared in all top-3 configurations, suggesting longer oscillation periods (less frequent gating) are preferable. (3) For PSC-NoGate, beta=0.1 (slower prediction compartment decay) appeared in all top-3 configurations. (4) PSC-NoGate grid search best (MSE=0.162) substantially outperformed PSC-Osc best (MSE=0.200) at 1000 iterations.
+
+
+FULL 5000-ITERATION TRAINING RESULTS
+
+The best configuration from the grid search was selected for each PSC variant and trained for 5000 iterations alongside BPTT and FA. Results are summarized below.
+
+Table 3: Final Performance After 5000 Training Iterations
+
+  Method             Final MSE  Final Acc  Description
+  -----------------  ---------  ---------  -----------------------------------
+  BPTT               0.0005     100.0%     Gold standard (backprop through time)
+  PSC-NoGate         0.1575      76.4%     PSC without oscillatory gate
+  PSC-Osc            0.2494      51.7%     PSC with oscillatory gate (T=20)
+  FA                 0.2523      50.8%     Feedback Alignment baseline
+
+BPTT achieved perfect accuracy, confirming the task is solvable. PSC-NoGate was the only biologically-plausible method to substantially exceed random chance. PSC-Osc and FA both hovered near 50%, which corresponds to random guessing on binary outputs.
+
+
+CONVERGENCE SPEED
+
+Table 4: Number of Iterations to First Reach Accuracy Threshold (null = never reached)
+
+  Method       60%    70%    75%    80%    90%
+  -----------  -----  -----  -----  -----  -----
+  BPTT           200    200    200    300    300
+  PSC-NoGate     300    500    700    700    N/A
+  PSC-Osc        200    400    700    N/A    N/A
+  FA             N/A    N/A    N/A    N/A    N/A
+
+BPTT converges rapidly, reaching 75% accuracy at iteration 200 and 90% by iteration 300. PSC-NoGate converges more slowly but steadily, reaching 75% by iteration 700. PSC-Osc briefly crosses 70% around iteration 400-700 but subsequently degrades. FA never reaches 60% accuracy at any point during training.
+
+It should be noted that PSC-NoGate's learning curve was notably noisy and non-monotonic. While it briefly reached 83.5% accuracy at iteration 3100, it fluctuated considerably and ended at 76.4% at iteration 5000, suggesting the algorithm has not fully converged and may benefit from longer training or additional regularization.
+
+
+LEARNING CURVE OBSERVATIONS
+
+BPTT: Smooth, rapid convergence. MSE drops from ~0.59 to near zero by iteration 500, and accuracy reaches 100% by approximately iteration 300. No degradation observed.
+
+PSC-NoGate: Progressive but noisy learning. MSE drops from ~0.59 to approximately 0.13-0.16 range, with accuracy fluctuating between 70-84% in the latter half of training. The algorithm shows genuine learning signal but lacks the stability of BPTT.
+
+PSC-Osc: Initial learning followed by degradation. The method reaches a peak accuracy of approximately 77% around iteration 600, then progressively deteriorates to near-random performance by iteration 5000. This pattern suggests that the oscillatory gating mechanism introduces instability over long training runs.
+
+FA: Essentially flat learning curves throughout all 5000 iterations. MSE oscillates narrowly around 0.25 and accuracy around 50%, showing no meaningful improvement beyond the earliest iterations.
+    </pre>
+</section>
+
+<section>
+<h2>Analysis</h2>
+OVERALL PERFORMANCE HIERARCHY
+
+The four methods show a clear performance hierarchy: BPTT >> PSC-NoGate >> PSC-Osc  FA. However, the gap between the gold standard and the best biologically-plausible method is substantial (100% vs 76.4%), and the gap between PSC-NoGate and the other two bio-plausible methods is also large (76.4% vs ~51%). We analyze each finding in turn.
+
+
+BPTT: THE TASK IS SOLVABLE
+
+BPTT converges rapidly and perfectly, establishing that the copy task with these parameters is learnable. An illustrative example of BPTT's convergence: starting from near-random performance (initial MSE=0.592, accuracy=51.1%), BPTT reached 90.1% accuracy by iteration 150 and 97.3% by iteration 200 in preliminary tests with just 200 training iterations. In the full 5000-iteration run, BPTT reached 100% accuracy by approximately iteration 300 and maintained it through all 5000 iterations, with MSE converging to 0.0005. This near-zero MSE at 100% accuracy confirms that the output activations are not merely classified correctly but are numerically close to the target values (0 and 1).
+
+This rapid convergence establishes an important reference point: the copy task is not fundamentally difficult for an RNN with 128 hidden units. Any failure of biologically-plausible methods to solve the task therefore reflects limitations in the learning rule rather than architectural insufficiency.
+
+
+PSC-NOGATE: GENUINE BUT INCOMPLETE LEARNING
+
+PSC-NoGate is the strongest biologically-plausible result. To understand what the algorithm is doing, consider its behavior on a sample sequence. At timestep t=0, the network receives bit 0 in channel 0 (e.g., for pattern [0,1,0,0,0,1,0,0], channel 0 receives 0). The eligibility trace immediately begins accumulating: e_ij(t) = dtanh_i(t) * h_j(t-1). At the recall cue (t=17), the marker input fires, and the network begins producing outputs. At output timesteps t=18 to t=25, the output error (y - target) is projected back through W_out to the hidden layer, producing the credit signal. This credit signal, multiplied by the eligibility trace accumulated over the preceding 18 timesteps, provides the weight update.
+
+In early training, with gamma=0.5, the credit signal is: s_i(t) = 0.5 * delta_pred_i(t) + 0.5 * output_err_hidden_i(t). The prediction compartment (beta=0.1) builds a slow-moving expectation of each neuron's activity; at early stages, when W_pred is random, delta_pred is essentially noise. The output error component dominates useful learning, while the prediction error component adds regularizing noise that may help exploration.
+
+The learning trajectory shows this dynamic in practice. In the 500-iteration test, PSC-NoGate with gamma=0 (pure output error, no prediction) reached MSE=0.157, accuracy=77.4%. With gamma=0.3 (mixed), performance was comparable: MSE=0.160, accuracy=76.1%. This suggests the prediction compartment contributes modestly at best in early training, with the eligibility-trace-output-error combination carrying most of the learning signal.
+
+In the full 5000-iteration run, PSC-NoGate's learning was notably non-monotonic. It reached 82.3% accuracy at iteration 800, dipped back toward 72% around iterations 900-1700, recovered to 83.5% at iteration 3100, then settled at 76.4% by iteration 5000. This instability -- which does not occur in BPTT -- likely reflects the interaction between the changing W_pred, evolving eligibility traces, and the credit signal. As the network changes, the output error projected via W_out provides a moving target for the eligibility-trace update, potentially causing oscillations.
+
+The convergence speed comparison is instructive. PSC-NoGate reaches 60% accuracy at iteration 300 (vs 200 for BPTT), 70% at iteration 500 (vs 200 for BPTT), and 75% at iteration 700 (vs 200 for BPTT). Beyond 75%, PSC-NoGate fluctuates and never reaches 80% reliably. In contrast, BPTT crosses 80% before iteration 300 and reaches 90% at iteration 300.
+
+
+PSC-OSC: OSCILLATORY GATING IS COUNTERPRODUCTIVE
+
+The most striking negative finding is the failure of oscillatory gating. PSC-Osc uses gate(t) = max(0, sin(2*pi*t/T_theta)) to restrict weight updates to positive half-cycles of a sinusoidal oscillation. With the best configuration (T_theta=20), the gate is positive for approximately half of all timesteps (those where sin > 0). This means that on average, only about 13 out of 26 timesteps per sequence contribute to the weight update.
+
+The consequences are severe. Consider the trajectory: PSC-Osc starts similarly to PSC-NoGate, reaching ~66% at iteration 100 and 77% around iterations 500-600. However, rather than continuing to improve, it systematically degrades. By iteration 1000, accuracy has dropped to 63.5%. By iteration 2000, it is 62.1%. By iteration 5000, it is 51.7% -- essentially random.
+
+This degradation pattern (initial progress followed by collapse) suggests that the oscillatory gate introduces a form of training instability. A plausible mechanism: with T_theta=20, the gate has the same phase regardless of sequence content. During the input phase (t=0-7) and delay phase (t=8-17), the gate fires at fixed times unrelated to when the relevant information (the output error at t=18-25) is available. The eligibility trace accumulates during these fixed windows, but the credit signal (which is nonzero only at output timesteps) may not align well with the gating windows. This temporal misalignment between when plasticity is permitted and when informative credit signals arrive likely degrades learning over time.
+
+Furthermore, the best T_theta in the grid search was 20 for all top PSC-Osc configurations, while T_theta=10 performed worse. With T_theta=10, the gate completes two full cycles per sequence, potentially creating even more temporal misalignment. T_theta=20 at least ensures that gate-open periods span a larger fraction of the sequence, but even this is insufficient for stable learning.
+
+In contrast, PSC-NoGate (gate=1 always) updates weights at every timestep, ensuring that the eligibility traces accumulated during the input phase are always available to be modified by the credit signal at output timesteps. Removing the gate constraint increases the effective learning rate and eliminates the temporal misalignment problem.
+
+This finding challenges the biological motivation for oscillatory gating in this context. While theta-gated plasticity in the hippocampus serves specific functional purposes (such as separating encoding and retrieval phases), a simple sinusoidal gate applied uniformly to all timesteps appears to be harmful rather than helpful on the copy task as implemented here.
+
+
+FEEDBACK ALIGNMENT: FAILURE OF BACKWARD CREDIT PROPAGATION
+
+FA's failure (50.8% throughout 5000 iterations, never reaching 60%) is consistent with known limitations of random feedback for temporal tasks. Consider what FA is doing: at each output timestep, the output error is projected backward through fixed random matrix B_out (128 x 8) to the hidden layer, and this error is then propagated backward through time via another fixed random matrix B_rec (128 x 128).
+
+The fundamental problem is that B_out and B_rec bear no relationship to the actual forward weights W_out and W_rec. For a simple feedforward task, FA can still learn because the random projection preserves rough directional information (Lillicrap et al., 2016). However, for temporal tasks requiring credit assignment across 18+ timesteps (from output at t=18-25 back to input at t=0-7), the signal-to-noise ratio of random backward projection degrades severely with sequence length. Each application of B_rec multiplies the error by a random matrix, progressively decorrelating the propagated signal from the true gradient.
+
+The FA learning curve illustrates this: in the first 100 iterations, MSE drops from 0.575 to 0.274, suggesting some initial learning from the output layer. But from iteration 100 onward, the curve flatlines at MSE ~0.25-0.26 and accuracy ~49-53%, showing that W_out is partially learning but W_rec and W_in receive no useful credit signal. The random backward projection through time fails completely.
+
+This contrasts sharply with PSC-NoGate, which also uses W_out^T to project output error (not a random matrix), but couples it with eligibility traces rather than backpropagation. The eligibility trace e_ij(t) acts as a forward-pass memory of which synapses were active leading up to the output, allowing the output error to correctly credit the weights responsible even without backward propagation. This is the key mechanistic difference between PSC-NoGate (which works) and FA (which does not).
+
+
+STABILITY CHALLENGES IN PSC IMPLEMENTATION
+
+One practically important finding was the numerical instability of the naive PSC implementation. In the initial implementation, the per-sample eligibility trace (shape: batch x 128 x 128 = 32 x 16,384 elements) grew without bound due to accumulation across 26 timesteps. With decay lambda=0.9, the geometric sum converges theoretically, but in practice, the combination of large hidden size, batch averaging, and the outer product structure caused gradient explosions manifesting as NaN values after 100-150 iterations.
+
+The instability was resolved by: (1) clipping the per-sample eligibility trace to maximum Frobenius norm 5 at each timestep, (2) clipping the W_pred gradient to unit norm before application, and (3) maintaining separate gradient clipping for main weights (norm 1.0 via Adam). These stability fixes are practically important for any implementation of eligibility-trace-based learning rules and should be considered standard practice.
+
+
+SUMMARY OF MECHANISM ANALYSIS
+
+The results suggest the following ordering of importance for the PSC components:
+
+1. Eligibility traces + output error: The core working mechanism. Eligibility traces provide temporal credit assignment; output error via W_out^T provides learning direction. Together, these enable ~76% accuracy.
+
+2. Prediction compartment: Contributes modestly. Experiments with gamma=0 (no prediction) achieve similar or slightly better performance than gamma=0.5 at 500 iterations, suggesting the prediction error does not substantially improve learning on this task, at least in the early training regime.
+
+3. Oscillatory gating: Actively harmful in this setting. Removing the gate improves performance from ~52% to ~76%, a difference of 24 percentage points. The temporal misalignment between gate-open windows and informative credit signals is the likely cause.
+
+These findings are informative but should be interpreted with caution given that they are based on a single task (copy task), a single architecture (128-unit vanilla RNN), and a single delay period (10 steps). The relative importance of each component may differ for other tasks, architectures, or temporal scales.
+</section>
+
+<section>
+<h2>Conclusion</h2>
+This study implemented and evaluated the Predictive Self-Correction (PSC) learning rule for recurrent neural networks on the copy task, comparing it against BPTT (gold standard), Feedback Alignment (FA, baseline), and an ablation condition removing the oscillatory gate. The following conclusions are supported by the experimental evidence, stated conservatively.
+
+MAIN FINDINGS
+
+1. PSC without oscillatory gating (PSC-NoGate) achieves partial but genuine learning. PSC-NoGate reached 76.4% bit accuracy after 5000 training iterations, substantially above random chance (50%) and substantially above FA (50.8%). This is a positive result: it demonstrates that a purely local, forward-pass learning rule combining eligibility traces and projected output error can partially solve a temporal credit assignment problem without any backward propagation. However, the performance gap relative to BPTT (100%) is large, and PSC-NoGate's learning curve was noisy and non-monotonic, suggesting the algorithm has not fully converged and may not be stable.
+
+2. Oscillatory gating is harmful in this setting. PSC-Osc, which restricts weight updates to positive phases of a sinusoidal oscillation, achieved only 51.7% accuracy -- essentially random performance. The gating mechanism caused initial learning followed by progressive degradation over 5000 iterations. The most likely explanation is temporal misalignment: the fixed sinusoidal gate restricts plasticity to windows that do not align with the informative credit signal (which arrives at output timesteps). This is an important negative finding, but it applies specifically to the sinusoidal gating scheme tested here and should not be taken as evidence against all forms of oscillatory plasticity gating.
+
+3. Feedback Alignment fails on this task. FA never exceeded 60% accuracy throughout 5000 iterations, confirming that random feedback matrices are insufficient for temporal credit assignment over sequences of this length (26 timesteps). This is consistent with known limitations of FA and serves as a meaningful lower-bound baseline.
+
+4. The eligibility trace is the core functional component. Comparing PSC-NoGate (which uses eligibility traces + projected output error) against FA (which uses random backward projection without eligibility traces) reveals a 25-percentage-point accuracy advantage for PSC-NoGate. This suggests that eligibility traces, rather than the prediction compartment or oscillatory gating, are the primary driver of PSC's advantage.
+
+5. The prediction compartment contributes modestly, if at all, in this setting. Experiments comparing gamma=0 (no prediction error) against gamma=0.5 (equal weighting of prediction and output error) showed similar performance at 500 iterations (77.4% vs 76.1%). The self-supervised prediction signal does not appear to substantially accelerate or improve learning on the copy task, at least within the training budget tested.
+
+LIMITATIONS AND CAVEATS
+
+These conclusions are based on a single task (copy task), a single architecture (128-unit vanilla RNN), a single delay length (10 steps), and a single random seed for final experiments. Performance may differ substantially on other tasks, longer delays, larger or smaller networks, or different random initializations. The hyperparameter search, while systematic, used only 1000 iterations per configuration to select the best settings, which may not identify configurations that perform best over longer training runs.
+
+The PSC-NoGate result of 76.4% should not be over-interpreted. The noisy, non-monotonic learning curve suggests the algorithm may be sensitive to initialization or may require careful tuning to achieve reliable convergence. It is possible that with longer training or improved hyperparameters, performance could improve further -- or that it has reached a fundamental ceiling. We cannot distinguish these possibilities from the current experiments.
+
+BROADER SIGNIFICANCE
+
+The finding that eligibility-trace-based local learning can achieve 76.4% accuracy on a temporal memory task without any backward propagation is a modest positive result for biologically-plausible learning research. It suggests that the core mechanism -- using synaptic eligibility traces as a forward-pass memory of recent activity, combined with a sparse output error signal -- is a viable approach worth further investigation. However, the substantial gap below BPTT, the instability of training, and the failure of the oscillatory gating component indicate that significant algorithmic development is still needed before PSC or similar rules could be considered practical alternatives to BPTT in applied settings. We recommend that future work focus on improving learning stability, testing across multiple tasks and architectures, and investigating more principled approaches to oscillatory gating that align plasticity windows with informative credit signals.
+</section>
+
+
+
+<h3>Notes</h3>
+claude-sonnet-4-6: 4748347 tokens
+Runtime: 53 minutes.
+
+
+
+

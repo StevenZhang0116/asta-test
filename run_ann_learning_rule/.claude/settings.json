@@ -1,0 +1,6 @@
+{
+  "enabledPlugins": {
+    "asta@asta-plugins": true,
+    "asta-preview@asta-plugins": true
+  }
+}

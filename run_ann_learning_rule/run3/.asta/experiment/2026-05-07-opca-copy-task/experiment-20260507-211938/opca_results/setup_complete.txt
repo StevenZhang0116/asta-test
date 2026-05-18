@@ -1,3 +1,0 @@
-PyTorch: 2.11.0+cu130
-CUDA: True
-NumPy: 2.4.4

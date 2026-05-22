@@ -18,6 +18,29 @@ The research loop in this directory is driven by the **`research-step`** skill (
   Reason: matches the Asta ecosystem and the skill handles edge cases (missing fields, search ranking) that ad-hoc scripts silently mishandle.
   How to apply: when fetching metadata for ≤ ~10 papers. For bulk cluster searches, `asta literature find` is still correct.
 
+- **Post-hoc novelty audit: drive the literature sweep with the `find-literature` skill, not `semantic-scholar-lookup` alone.**
+  Reason: the audit (per `mission.md` Constraints) requires criteria-driven retrieval with relevance ranking across many candidates, not metadata fetches for a handful of named papers. `find-literature` runs the full Asta paper-finder agent (criteria extraction → candidate retrieval → re-ranking) and is the right primary tool for the post-hoc `literature_review` task. `semantic-scholar-lookup` complements it for filling in `citations[]` entries (`id`, `title`, `url`) once the top hits are chosen.
+  How to apply: in any post-hoc novelty-audit `literature_review` execute, start with `find-literature` (use `asta literature interactive` if the audit dominates the session, `asta literature find` if it's a sub-step in a broader research loop), then use `semantic-scholar-lookup` to fetch metadata for the top hits that go into `citations[]`.
+
+- **Richer audit writeups: use the `literature-report` skill when the novelty assessment needs synthesis, not just bullets.**
+  Reason: `literature_review.output.key_findings[]` is bullets and `summary_path` is free-form text. When the audit verdict is `near-match` or `overlap` and the prose needs to argue *how* the work overlaps, `literature-report` produces a structured comparison with citations rendered correctly and consumable by downstream `synthesis`.
+  How to apply: optional, but preferred over hand-writing long-form audit prose into `background_knowledge.txt`. Output goes to a `literature_report_step<N>.md` artifact; the durable findings still need to be encoded into the beads task's `output` per the layout convention below.
+
+- **PDFs without abstracts: use the `pdf-extraction` skill before reading them as text.**
+  Reason: when a top hit from `find-literature` resolves only to a PDF (no S2 abstract, no HTML), the agent must extract text before it can be cited or summarized. Ad-hoc text extraction silently mishandles columns, footnotes, and equations.
+  How to apply: in any literature-related execute when a candidate paper is PDF-only.
+
+- **Cross-run search across this run's audit corpus: use the `asta-documents` skill to index audit artifacts.**
+  Reason: as more `literature_review` audits accumulate within the run, finding "did we already cite paper X?" or "what did the previous audit say about online learning?" becomes painful. Indexing each audit's outputs (citations, summary text) lets the agent semantic-search across the run's own audit history.
+  How to apply: optional, useful once ≥2 post-hoc audits have run. Indexing is idempotent and incremental.
+
+- **`generate-theories` is gated on the source `literature_review`: forbidden for the first round, allowed for later rounds.**
+  Reason: the cold-draft requirement (`mission.md` Constraints: hypothesis-first) only binds the *first* hypothesis — the one spawned from the deferred bootstrap LR0 — because that's the round the deferral is designed to protect from literature bias. Once a real post-hoc novelty audit has closed, literature exposure is no longer prohibited, and `generate-theories` becomes a legitimate option for grounding subsequent hypotheses in the literature.
+  Detection: a hypothesis is "first round" iff its `inputs[]` reference a `literature_review` whose `output.key_findings[0]` begins with the `[DEFERRED-LR]` marker (set by `defer_lr0.py`). Check via `bd show <lr-id> --json | jq -r '.[0].metadata.research_step.output.key_findings[0]'` and look for the marker prefix. Real audits never carry it.
+  How to apply:
+    - **First-round hypothesis** (source LR has `[DEFERRED-LR]`): draft cold from first principles using only `mission.md` and `scope.output`. Do not invoke `generate-theories`, `find-literature`, `semantic-scholar-lookup`, web search, or any other literature tool during drafting. Plan auto-resolves nothing here — the sentinel gap leaves the hypothesis open for cold drafting via `execute`.
+    - **Later-round hypothesis** (source LR is a real post-hoc audit, no `[DEFERRED-LR]`): two valid paths. (a) The standard `plan` auto-resolve from the audit's `gaps[]` and `key_findings/citations` — preferred when the audit's gap text is concrete enough to support a hypothesis directly. (b) Invoke `generate-theories` when the audit surfaces a question that warrants a fresh, broader literature-driven theory sweep — e.g., a `near-match` or `overlap` verdict where the next hypothesis should engage deeply with prior art rather than incrementally extend the cold one. If using path (b), document the deviation per "If you deviate, say so up-front" below; the theorizer's outputs do not enter beads automatically — translate the chosen theory into `hypothesis.output` (statement, rationale, falsifiable_prediction, expected_evidence) before closing.
+
 ## Project layout
 
 - **`references.bib` lives inside each `runN/`, not in a shared parent.**
